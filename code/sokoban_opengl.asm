@@ -15,17 +15,16 @@ OpenglInit proc
 	ret
 OpenglInit endp
 
-OpenglAllocateTexture proc, _Width: s32, _Height: s32, Buffer: ptr u32
-	local TextureHandle: u32
-	invoke glGenTextures, 1, addr TextureHandle
-	invoke glBindTexture, GL_TEXTURE_2D, TextureHandle
+OpenglAllocateTexture proc, _Width: s32, _Height: s32, Buffer: ptr u32, Result: ptr u32
+	invoke glGenTextures, 1, Result
+	mov eax, Result
+	invoke glBindTexture, GL_TEXTURE_2D, [eax]
 	invoke glTexParameteri, GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT
 	invoke glTexParameteri, GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT
 	invoke glTexParameteri, GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR
 	invoke glTexParameteri, GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR
 	invoke glTexImage2D, GL_TEXTURE_2D, 0, GL_RGBA8, _Width, _Height, 0, GL_BGRA, GL_UNSIGNED_BYTE, Buffer
 	invoke glBindTexture, GL_TEXTURE_2D, 0
-	mov eax, TextureHandle
 	ret
 OpenglAllocateTexture endp
 
