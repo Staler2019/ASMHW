@@ -40,9 +40,14 @@ AssertZ macro Condition
 OK:
 endm
 
-mov_mem macro Des, Src, Reg
-	mov Reg, Src
-	mov Des, Reg
+mov_mem macro Des, Src, reg
+	mov reg, Src
+	mov Des, reg
+endm
+
+lea_mem macro Des, Src, reg
+	lea reg, Src
+	mov Des, reg
 endm
 
 loaded_file struct
@@ -55,6 +60,7 @@ include windows.inc
 include sokoban_opengl.inc
 include sokoban_opengl.asm
 include sokoban.asm
+include Game.asm
 
 .data
 WindowClassName char "SokobanWindowClass", 0
@@ -483,7 +489,7 @@ END_CLEAR_GAME_STATE:
 		shr eax, 15
 		mov GameInput.Buttons[Mouse_Right], eax
 		
-		invoke GameUpdate, addr GameState, addr GameInput
+		invoke GameUpdate, addr GameState, addr GameInput, WindowWidth, WindowHeight
 		invoke IsDown, addr GameInput, Button_Up
 		test eax, eax
 		jz NOPRESS

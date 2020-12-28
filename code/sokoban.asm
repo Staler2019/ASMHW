@@ -1,5 +1,7 @@
 
+include sokoban_input.inc
 include sokoban_asset.inc
+include sokoban_struct.inc
 
 bmp_header struct
 	MagicValue		u16 ?
@@ -19,84 +21,6 @@ bmp_header struct
 	biClrImportant	u32 ?
 bmp_header ends
 
-loaded_bitmap struct
-	BitmapWidth		s32 ?
-	BitmapHeight	s32 ?
-	Buffer			voidptr ?
-loaded_bitmap ends
-
-loaded_font struct
-	Ascent s32 ?
-	Descent s32 ?
-	Glyphs loaded_bitmap 256 dup(<>)
-loaded_font ends
-
-platform_free_memory typedef proto, Memory: voidptr
-platform_load_file typedef proto, Path: ptr char, Result: ptr loaded_file
-platform_write_file typedef proto, Path: ptr char, BufferSize: u32, Buffer: voidptr
-platform_load_font typedef proto, RenderContext: u32, Path: ptr char, FaceName: ptr char, Result: ptr loaded_font
-platform_free_memory_ptr typedef ptr platform_free_memory
-platform_load_file_ptr typedef ptr platform_load_file
-platform_write_file_ptr typedef ptr platform_write_file
-platform_load_font_ptr typedef ptr platform_load_font
-platform_state struct
-	RenderContext u32 0
-	FreeMemory	platform_free_memory_ptr 0
-	LoadFile	platform_load_file_ptr 0
-	WriteFile	platform_write_file_ptr 0
-	LoadFont	platform_load_font_ptr 0
-platform_state ends
-
-Mouse_Left		equ 0
-Mouse_Right		equ 1
-Mouse_Middle	equ 2
-Button_Up		equ 3
-Button_Down		equ 4
-Button_Left		equ 5
-Button_Right	equ 6
-Button_Space	equ 7
-Button_Escape	equ 8
-Button_DevMode	equ 9
-Button_Count	equ 10
-game_input struct
-	MouseX s32 ?
-	MouseY s32 ?
-	WheelDelta s32 ?
-	Buttons		b32 Button_Count dup(?)
-	LastButtons	b32 Button_Count dup(?)
-game_input ends
-
-game_asset struct
-	Bitmaps loaded_bitmap Bitmap_Count dup(<>)
-	BitmapHandles u32 Bitmap_Count dup(0)
-	
-	Fonts loaded_font Font_Count dup (<>)
-	GlyphHandles u32 Font_Count*256 dup(0)
-game_asset ends
-
-render_transform struct
-	ScaleX f32 ?
-	ScaleY f32 ?
-	CameraX f32 ?
-	CameraY f32 ?
-render_transform ends
-
-game_level struct
-	LevelWidth s32 ?
-	LevelHeight s32 ?
-	PlayerX f32 ?
-	PlayerY f32 ?
-	LevelMap u8 65536 dup(?)
-game_level ends
-
-game_state struct
-	InDevMode b32 ?
-	Assets game_asset <>
-	GameTransform render_transform <>
-	ScreenTransform render_transform <>
-	Level voidptr ?
-game_state ends
-
 .data
 BoxPath char "asset/box.bmp", 0
 PlayerPath char "asset/player.bmp", 0
@@ -107,6 +31,9 @@ TestStr char "HELLg, worlD!", 0
 LevelPath char "level/level1.lvl", 0
 
 .code
+SokobanInit proto, GameState: ptr game_state, Platform: ptr platform_state, Assets: ptr game_asset, GameTransform: ptr render_transform, ScreenTransform: ptr render_transform, Level: ptr ptr game_level
+SokobanUpdate proto, GameState: ptr game_state, GameInput: ptr game_input, Assets: ptr game_asset, GameTransform: ptr render_transform, ScreenTransform: ptr render_transform, Level: ptr ptr game_level, WindowWidth: s32, WindowHeight: s32
+SokobanRender proto, GameState: ptr game_state, WindowWidth: s32, WindowHeight: s32, Assets: ptr game_asset, GameTransform: ptr render_transform, ScreenTransform: ptr render_transform, Level: ptr ptr game_level
 
 GetBitmapHandle proc, Assets: ptr game_asset, BitmapId: u32
 	mov eax, BitmapId
@@ -318,13 +245,6 @@ DrawBitmap proc, Transform: ptr render_transform, Assets: ptr game_asset, Bitmap
 	pop eax
 	ret
 DrawBitmap endp
-
-AlignX_ToLeft	equ 0
-AlignX_ToMiddle	equ 1
-AlignX_ToRight	equ 2
-AlignY_ToBaseLine	equ 0
-AlignY_ToTop		equ 1
-AlignY_ToBottom		equ 2
 
 DrawString proc, Transform: ptr render_transform, Assets: ptr game_asset, 
 	String: ptr char, FontId: u32, X: f32, Y: f32, Height: f32, AlignX: u32, AlignY: u32, R: f32, G: f32, B: f32, A: f32
@@ -546,82 +466,114 @@ LEVEL_LOAD_FAILED:
 	ret
 LoadLevel endp
 
+SetCameraP proc, Transform: ptr render_transform, X: f32, Y: f32
+	mov eax, Transform
+	mov_mem (render_transform ptr[eax]).CameraX, X, ebx
+	mov_mem (render_transform ptr[eax]).CameraY, Y, ebx
+	ret
+SetCameraP endp
+
+AddCameraP proc, Transform: ptr render_transform, X: f32, Y: f32
+	mov eax, Transform
+	movss xmm0, (render_transform ptr[eax]).CameraX
+	addss xmm0, X
+	movss (render_transform ptr[eax]).CameraX, xmm0
+	movss xmm0, (render_transform ptr[eax]).CameraY
+	addss xmm0, Y
+	movss (render_transform ptr[eax]).CameraY, xmm0
+	ret
+AddCameraP endp
+
+TransformMouse proc, Input: ptr game_input, Transform: ptr render_transform, WindowWidth: s32, WindowHeight: s32
+	local X: f32
+	local Y: f32
+	mov eax, Input
+	cvtsi2ss xmm0, (game_input ptr[eax]).MouseX
+	cvtsi2ss xmm1, WindowWidth
+	divss xmm0, xmm1
+	subss xmm0, f_5
+	mulss xmm0, f2_
+	mov eax, Transform
+	movss xmm1, (render_transform ptr[eax]).ScaleX
+	SafeRatio1 xmm0, xmm1
+	addss xmm0, (render_transform ptr[eax]).CameraX
+	movss X, xmm0
+	mov eax, Input
+	cvtsi2ss xmm0, (game_input ptr[eax]).MouseY
+	cvtsi2ss xmm1, WindowHeight
+	divss xmm0, xmm1
+	subss xmm0, f_5
+	mulss xmm0, f2_
+	mov eax, Transform
+	movss xmm1, (render_transform ptr[eax]).ScaleY
+	SafeRatio1 xmm0, xmm1
+	addss xmm0, (render_transform ptr[eax]).CameraY
+	movss Y, xmm0
+	movss xmm0, X
+	movss xmm1, Y
+	ret
+TransformMouse endp
+
 GameInit proc, GameState: ptr game_state, Platform: ptr platform_state
 	local Assets: ptr game_asset
-	mov edx, GameState
-	lea eax, (game_state ptr[edx]).Assets
-	mov Assets, eax
-	invoke LoadBitmap, Platform, Assets, Bitmap_Box, offset BoxPath
-	invoke LoadBitmap, Platform, Assets, Bitmap_Player, offset PlayerPath
-	invoke LoadBitmap, Platform, Assets, Bitmap_Key, offset KeyPath
-	invoke LoadFont, Platform, Assets, Font_Debug, offset FontPath, offset FontFace
-	mov edx, GameState
-	mov_mem (game_state ptr[edx]).GameTransform.CameraX, f4_, eax
-	mov_mem (game_state ptr[edx]).GameTransform.CameraY, f4_, eax
+	local GameTransform: ptr render_transform
+	local ScreenTransform: ptr render_transform
+	local Level: ptr ptr game_level
+	mov eax, GameState
+	lea_mem Assets, (game_state ptr[eax]).Assets, ebx
+	lea_mem GameTransform, (game_state ptr[eax]).GameTransform, ebx
+	lea_mem ScreenTransform, (game_state ptr[eax]).ScreenTransform, ebx
+	lea_mem Level, (game_state ptr[eax]).Level, ebx
+	
+	invoke SokobanInit, GameState, Platform, Assets, GameTransform, ScreenTransform, Level
 	
 	;invoke SaveLevel, GameState, Platform, offset LevelPath
 	invoke LoadLevel, GameState, Platform, offset LevelPath
 	ret
 GameInit endp
 
-GameUpdate proc, GameState: ptr game_state, GameInput: ptr game_input
-	invoke IsDown, GameInput, Button_Up
-	test eax, eax
-	jz UP_NOT_DOWN
-	mov edx, GameState
-	movss xmm0, (game_state ptr[edx]).GameTransform.CameraY
-	addss xmm0, f_05
-	movss (game_state ptr[edx]).GameTransform.CameraY, xmm0
-UP_NOT_DOWN:
-
-	invoke IsDown, GameInput, Button_Down
-	test eax, eax
-	jz DOWN_NOT_DOWN
-	mov edx, GameState
-	movss xmm0, (game_state ptr[edx]).GameTransform.CameraY
-	subss xmm0, f_05
-	movss (game_state ptr[edx]).GameTransform.CameraY, xmm0
-DOWN_NOT_DOWN:
+GameUpdate proc, GameState: ptr game_state, GameInput: ptr game_input, WindowWidth: s32, WindowHeight: s32
+	local Assets: ptr game_asset
+	local GameTransform: ptr render_transform
+	local ScreenTransform: ptr render_transform
+	local Level: ptr ptr game_level
+	mov eax, GameState
+	lea_mem Assets, (game_state ptr[eax]).Assets, ebx
+	lea_mem GameTransform, (game_state ptr[eax]).GameTransform, ebx
+	lea_mem ScreenTransform, (game_state ptr[eax]).ScreenTransform, ebx
+	lea_mem Level, (game_state ptr[eax]).Level, ebx
 	
 	invoke IsPressed, GameInput, Button_DevMode
 	test eax, eax
-	jz InDevMode_NOT_IS_PRESSED
+	jz IN_DEVMODE_IS_NOT_PRESSED
 	mov edx, GameState
 	mov eax, (game_state ptr[edx]).InDevMode
 	xor eax, 1
 	mov (game_state ptr[edx]).InDevMode, eax
-InDevMode_NOT_IS_PRESSED:
-
+IN_DEVMODE_IS_NOT_PRESSED:
+	invoke SokobanUpdate, GameState, GameInput, Assets, GameTransform, ScreenTransform, Level, WindowWidth, WindowHeight
 	ret
 GameUpdate endp
 
 GameRender proc, GameState: ptr game_state, WindowWidth: s32, WindowHeight: s32
-	local MinX: f32
-	local MinY: f32
-	local MaxX: f32
-	local MaxY: f32
+	local FloatWindowHeight: f32
+	local HalfWidth: f32
+	local HalfHeight: f32
 	local Assets: ptr game_asset
 	local GameTransform: ptr render_transform
 	local ScreenTransform: ptr render_transform
-	local WindowHeightF: f32
-	local HalfWidth: f32
-	local HalfHeight: f32
+	local Level: ptr ptr game_level
 	
-	mov edx, GameState
-	lea eax, (game_state ptr[edx]).Assets
-	mov Assets, eax
-	lea eax, (game_state ptr[edx]).GameTransform
-	mov GameTransform, eax
-	lea eax, (game_state ptr[edx]).ScreenTransform
-	mov ScreenTransform, eax
 	
-	invoke glViewport, 0, 0, WindowWidth, WindowHeight
-	invoke glClear, GL_COLOR_BUFFER_BIT
+	mov eax, GameState
+	lea_mem Assets, (game_state ptr[eax]).Assets, ebx
+	lea_mem GameTransform, (game_state ptr[eax]).GameTransform, ebx
+	lea_mem ScreenTransform, (game_state ptr[eax]).ScreenTransform, ebx
+	lea_mem Level, (game_state ptr[eax]).Level, ebx
 	
-	invoke StartTransformByHeight, GameTransform, f8_, WindowWidth, WindowHeight
 	cvtsi2ss xmm0, WindowHeight
-	movss WindowHeightF, xmm0
-	invoke StartTransformByHeight, ScreenTransform, WindowHeightF, WindowWidth, WindowHeight
+	movss FloatWindowHeight, xmm0
+	invoke StartTransformByHeight, ScreenTransform, FloatWindowHeight, WindowWidth, WindowHeight
 	
 	cvtsi2ss xmm0, WindowWidth
 	divss xmm0, f2_
@@ -633,41 +585,9 @@ GameRender proc, GameState: ptr game_state, WindowWidth: s32, WindowHeight: s32
 	mov_mem (render_transform ptr[eax]).CameraX, HalfWidth, ebx
 	mov_mem (render_transform ptr[eax]).CameraY, HalfHeight, ebx
 	
-	mov ecx, 8
-START_Y:
-	cmp ecx, 0
-	jle END_Y
-		mov ebx, 9
-	START_X:
-		cmp ebx, 0
-		jle END_X
-			mov eax, ebx
-			cvtsi2ss xmm0, eax
-			movss MinX, xmm0
-			mov eax, ecx
-			cvtsi2ss xmm0, eax
-			movss MinY, xmm0
-			mov eax, ebx
-			add eax, 1
-			cvtsi2ss xmm0, eax
-			movss MaxX, xmm0
-			mov eax, ecx
-			add eax, 1
-			cvtsi2ss xmm0, eax
-			movss MaxY, xmm0
-			invoke DrawBitmap, GameTransform, Assets, Bitmap_Player, MinX, MinY, MaxX, MaxY, f1_, f1_, f1_, f1_
-		dec ebx
-		jmp START_X
-	END_X:
-	dec ecx
-	jmp START_Y
-END_Y:
-	invoke DrawBitmap, GameTransform, Assets, Bitmap_Key, f0_, f0_, f1_, f1_, f0_, f1_, f0_, f_5
-	invoke DrawString, GameTransform, Assets, 
-		offset TestStr, Font_Debug, f0_, f0_, f1_, AlignX_ToLeft, AlignY_ToBottom, f1_, f1_, f1_, f1_
-	invoke DrawString, GameTransform, Assets, 
-		offset TestStr, Font_Debug, f0_, f0_, f1_, AlignX_ToLeft, AlignY_ToTop, f1_, f1_, f1_, f1_
-	invoke DrawString, ScreenTransform, Assets, 
-		offset TestStr, Font_Debug, f100_, f0_, f100_, AlignX_ToMiddle, AlignY_ToBottom, f1_, f1_, f1_, f1_
+	invoke glViewport, 0, 0, WindowWidth, WindowHeight
+	invoke glClear, GL_COLOR_BUFFER_BIT
+	invoke SokobanRender, GameState, WindowWidth, WindowHeight, Assets, GameTransform, ScreenTransform, Level
+	
 	ret
 GameRender endp

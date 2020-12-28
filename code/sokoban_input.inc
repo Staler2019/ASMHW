@@ -1,0 +1,11 @@
+Mouse_Left		equ 0
+Mouse_Right		equ 1
+Mouse_Middle	equ 2
+Button_Up		equ 3
+Button_Down		equ 4
+Button_Left		equ 5
+Button_Right	equ 6
+Button_Space	equ 7
+Button_Escape	equ 8
+Button_DevMode	equ 9
+Button_Count	equ 10
