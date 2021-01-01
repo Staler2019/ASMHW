@@ -82,29 +82,58 @@ FinishPath char "asset/finish.bmp", 0
 	
 .code
 
-SetLevelDim proc uses eax ebx, Level: ptr ptr game_level, LevelWidth: s32, LevelHeight: s32
+Level_Width		equ 0
+Level_Height	equ 1
+Level_PlayerX	equ 2
+Level_PlayerY	equ 3
+Level_KeyCount	equ 4
+;no greater than 1023
+
+GetLevelVar proc uses esi edi ebx, Level: ptr ptr game_level, Index: s32, Value: ptr s32
+	mov esi, Level
+	mov esi, [esi]
+	lea esi, [(game_level ptr[esi]).LevelVars]
+	mov ebx, Index
+	imul ebx, sizeof s32
+	add esi, ebx
+	mov edi, Value
+	mov_mem [s32 ptr[edi]], [s32 ptr[esi]], ebx
+	ret
+GetLevelVar endp
+
+SetLevelVar proc uses eax ebx, Level: ptr ptr game_level, Index: s32, Value: s32
 	mov eax, Level
 	mov eax, [eax]
-	mov_mem (game_level ptr[eax]).LevelWidth, LevelWidth, ebx
-	mov_mem (game_level ptr[eax]).LevelHeight, LevelHeight, ebx
+	lea eax, [(game_level ptr[eax]).LevelVars]
+	mov ebx, Index
+	imul ebx, sizeof s32
+	add eax, ebx
+	mov_mem [s32 ptr[eax]], Value, ebx
+	ret
+SetLevelVar endp
+
+
+SetLevelDim proc uses eax ebx, Level: ptr ptr game_level, LevelWidth: s32, LevelHeight: s32
+	invoke SetLevelVar, Level, Level_Width, LevelWidth
+	invoke SetLevelVar, Level, Level_Height, LevelHeight
 	ret
 SetLevelDim endp
 
 SetPlayerP proc uses eax ebx, Level: ptr ptr game_level, PlayerX: s32, PlayerY: s32
-	mov eax, Level
-	mov eax, [eax]
-	mov_mem (game_level ptr[eax]).PlayerX, PlayerX, ebx
-	mov_mem (game_level ptr[eax]).PlayerY, PlayerY, ebx
+	invoke SetLevelVar, Level, Level_PlayerX, PlayerX
+	invoke SetLevelVar, Level, Level_PlayerY, PlayerY
 	ret
 SetPlayerP endp
 
 SetLevelTile proc uses eax ebx, Level: ptr ptr game_level, X: s32, Y: s32, Value: s32
-	mov eax, Level
-	mov eax, [eax]
-	mov ebx, (game_level ptr[eax]).LevelWidth
+	local LevelWidth: s32
+	invoke GetLevelVar, Level, Level_Width, addr LevelWidth
+	mov ebx, LevelWidth
 	imul ebx, Y
 	add ebx, X
-	lea eax, (game_level ptr[eax]).LevelMap
+	mov eax, Level
+	mov eax, [eax]
+	lea eax, [(game_level ptr[eax]).LevelMap]
 	add eax, ebx
 	lea ebx, Value
 	mov bl, [ebx]
@@ -114,31 +143,25 @@ SetLevelTile endp
 ;0->' ' 1-># 2->B 3->K 4->DC 5->DO 6->E
 
 GetLevelDim proc uses esi edi ebx, Level: ptr ptr game_level, LevelWidth: ptr s32, LevelHeight: ptr s32
-	mov esi, Level
-	mov esi, [esi]
-	mov edi, LevelWidth
-	mov_mem [s32 ptr[edi]], (game_level ptr[esi]).LevelWidth, ebx
-	mov edi, LevelHeight
-	mov_mem [s32 ptr[edi]], (game_level ptr[esi]).LevelHeight, ebx
+	invoke GetLevelVar, Level, Level_Width, LevelWidth
+	invoke GetLevelVar, Level, Level_Height, LevelHeight
 	ret
 GetLevelDim endp
 
 GetPlayerP proc uses esi edi ebx, Level: ptr ptr game_level, PlayerX: ptr s32, PlayerY: ptr s32
-	mov esi, Level
-	mov esi, [esi]
-	mov edi, PlayerX
-	mov_mem [s32 ptr[edi]], (game_level ptr[esi]).PlayerX, ebx
-	mov edi, PlayerY
-	mov_mem [s32 ptr[edi]], (game_level ptr[esi]).PlayerY, ebx
+	invoke GetLevelVar, Level, Level_PlayerX, PlayerX
+	invoke GetLevelVar, Level, Level_PlayerY, PlayerY
 	ret
 GetPlayerP endp
 
 GetLevelTile proc uses edi eax ebx, Level: ptr ptr game_level, X: s32, Y: s32, Value: ptr s32
-	mov eax, Level
-	mov eax, [eax]
-	mov ebx, (game_level ptr[eax]).LevelWidth
+	local LevelWidth: s32
+	invoke GetLevelVar, Level, Level_Width, addr LevelWidth
+	mov ebx, LevelWidth
 	imul ebx, Y
 	add ebx, X
+	mov eax, Level
+	mov eax, [eax]
 	lea eax, (game_level ptr[eax]).LevelMap
 	add eax, ebx
 	mov edi, Value
@@ -150,6 +173,7 @@ GetLevelTile endp
 SokobanRestart proc, Level: ptr ptr game_level
 	invoke SetLevelDim, Level, 10, 6
 	invoke SetPlayerP, Level, 1, 1
+	invoke SetLevelVar, Level, Level_KeyCount, 0
 	invoke SetLevelTile, Level, 0, 0, 1
 	invoke SetLevelTile, Level, 1, 0, 1
 	invoke SetLevelTile, Level, 2, 0, 1
@@ -210,7 +234,6 @@ SokobanRestart proc, Level: ptr ptr game_level
 	invoke SetLevelTile, Level, 7, 5, 1
 	invoke SetLevelTile, Level, 8, 5, 1
 	invoke SetLevelTile, Level, 9, 5, 1
-	invoke SetLevelTile, Level, 255, 255, 0
 	ret
 SokobanRestart endp
 
@@ -233,7 +256,7 @@ SokobanInit proc, GameState: ptr game_state, Platform: ptr platform_state,
 	;invoke LoadBitmap, Platform, Assets, Bitmap_EndPoint, offset EndPointPath 
 	;invoke LoadBitmap, Platform, Assets, Bitmap_Finish, offset FinishPath
 	invoke LoadFont, Platform, Assets, Font_Debug, offset FontPath, offset FontFace
-	invoke LoadLevel, GameState, Platform, offset LevelPath
+	;invoke LoadLevel, GameState, Platform, offset LevelPath
 	invoke SokobanRestart, Level
 	;invoke SaveLevel, GameState, Platform, offset LevelPath
 	;invoke DrawBitmap, GameTransform, Assets, Bitmap_Key, f_1_, f_1_, f1_, f1_, f0_, f1_, f0_, f1_
@@ -343,17 +366,17 @@ UD_BOX:
 UD_KEY:
 	invoke SetLevelTile, level, TryX, TryY, 0
 	invoke SetPlayerP, Level, TryX, TryY
-	invoke GetLevelTile, level, 255, 255, addr KeyCount
+	invoke GetLevelVar, level, Level_KeyCount, addr KeyCount
 	inc KeyCount
-	invoke SetLevelTile, level, 255, 255, KeyCount
+	invoke SetLevelVar, Level, Level_KeyCount, KeyCount
 	jmp UD_END
 UD_DOOR:
-	invoke GetLevelTile, level, 255, 255, addr KeyCount
+	invoke GetLevelVar, level, Level_KeyCount, addr KeyCount
 	mov edx, KeyCount
 	test edx, edx
 	jz UD_END
 	dec KeyCount
-	invoke SetLevelTile, level, 255, 255, KeyCount
+	invoke SetLevelVar, Level, Level_KeyCount, KeyCount
 	invoke SetLevelTile, level, TryX, TryY, 5
 	invoke SetPlayerP, Level, TryX, TryY
 	jmp UD_END

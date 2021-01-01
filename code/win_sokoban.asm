@@ -445,15 +445,8 @@ END_CLEAR_GAME_STATE:
 	mov Platform.WriteFile, Win32WriteFile
 	mov Platform.LoadFont, Win32LoadFont
 	
-	;NOTE: Enable these to build a blank 9x7 level.
-	;invoke VirtualAlloc, 0, sizeof game_level, MEM_COMMIT, PAGE_READWRITE
-	;mov GameState.Level, eax
-	;mov eax, GameState.Level
-	;mov (game_level ptr[eax]).LevelWidth, 9
-	;mov (game_level ptr[eax]).LevelHeight, 7
-	;mov (game_level ptr[eax]).PlayerX, 9
-	;mov (game_level ptr[eax]).PlayerY, 7
-	
+	invoke VirtualAlloc, 0, sizeof game_level, MEM_COMMIT, PAGE_READWRITE
+	mov GameState.Level, eax
 	
 	invoke GameInit, addr GameState, addr Platform
 	invoke QueryPerformanceFrequency, addr PerfCounterFreq
