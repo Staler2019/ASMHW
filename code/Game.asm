@@ -77,7 +77,6 @@
 ;GetLevelVar proc, Level: ptr ptr game_level, Index: s32, Value: ptr s32
 ;Get current level's variable at Index, returns in {*Value}.
 
-
 .data
 WallPath char "asset/wall.bmp", 0
 BlankPath char "asset/blank.bmp", 0
@@ -93,6 +92,7 @@ Level_Height	equ 1
 Level_PlayerX	equ 2
 Level_PlayerY	equ 3
 Level_KeyCount	equ 4
+Level_num       equ 5
 ;no greater than 1023
 
 GetLevelVar proc uses esi edi ebx, Level: ptr ptr game_level, Index: s32, Value: ptr s32
@@ -146,7 +146,7 @@ SetLevelTile proc uses eax ebx, Level: ptr ptr game_level, X: s32, Y: s32, Value
 	mov [eax], bl
 	ret
 SetLevelTile endp
-;0->' ' 1-># 2->B 3->K 4->DC 5->DO 6->E
+;0->' ' 1-># 2->B 3->K 4->DC 5->DO 6->E 7->H 8->FH 9->BonFH
 
 GetLevelDim proc, Level: ptr ptr game_level, LevelWidth: ptr s32, LevelHeight: ptr s32
 	invoke GetLevelVar, Level, Level_Width, LevelWidth
@@ -177,6 +177,14 @@ GetLevelTile proc uses edi eax ebx, Level: ptr ptr game_level, X: s32, Y: s32, V
 GetLevelTile endp
 
 SokobanRestart proc, Level: ptr ptr game_level
+	local PresentLevel:s32
+	invoke GetLevelVar, Level, Level_num, addr PresentLevel
+	cmp PresentLevel, 1
+	je Level1
+	cmp PresentLevel, 2
+	je Level2
+	jmp Level3
+Level1:
 	invoke SetLevelDim, Level, 10, 6
 	invoke SetPlayerP, Level, 1, 1
 	invoke SetLevelVar, Level, Level_KeyCount, 0
@@ -240,6 +248,115 @@ SokobanRestart proc, Level: ptr ptr game_level
 	invoke SetLevelTile, Level, 7, 5, 1
 	invoke SetLevelTile, Level, 8, 5, 1
 	invoke SetLevelTile, Level, 9, 5, 1
+	jmp RE_END
+Level2:
+	invoke SetLevelDim, Level, 11, 9
+	invoke SetPlayerP, Level, 2, 1
+	invoke SetLevelVar, Level, Level_KeyCount, 0
+	invoke SetLevelTile, Level, 0, 0, 1
+	invoke SetLevelTile, Level, 1, 0, 1
+	invoke SetLevelTile, Level, 2, 0, 1
+	invoke SetLevelTile, Level, 3, 0, 1
+	invoke SetLevelTile, Level, 4, 0, 1
+	invoke SetLevelTile, Level, 5, 0, 1
+	invoke SetLevelTile, Level, 6, 0, 1
+	invoke SetLevelTile, Level, 7, 0, 1
+	invoke SetLevelTile, Level, 8, 0, 1
+	invoke SetLevelTile, Level, 9, 0, 1
+	invoke SetLevelTile, Level, 10, 0, 1
+	invoke SetLevelTile, Level, 0, 1, 1
+	invoke SetLevelTile, Level, 1, 1, 1
+	invoke SetLevelTile, Level, 2, 1, 0
+	invoke SetLevelTile, Level, 3, 1, 0
+	invoke SetLevelTile, Level, 4, 1, 2
+	invoke SetLevelTile, Level, 5, 1, 0
+	invoke SetLevelTile, Level, 6, 1, 0
+	invoke SetLevelTile, Level, 7, 1, 2
+	invoke SetLevelTile, Level, 8, 1, 0
+	invoke SetLevelTile, Level, 9, 1, 1
+	invoke SetLevelTile, Level, 10, 1, 1
+	invoke SetLevelTile, Level, 0, 2, 1
+	invoke SetLevelTile, Level, 1, 2, 1
+	invoke SetLevelTile, Level, 2, 2, 2
+	invoke SetLevelTile, Level, 3, 2, 2
+	invoke SetLevelTile, Level, 4, 2, 2
+	invoke SetLevelTile, Level, 5, 2, 0
+	invoke SetLevelTile, Level, 6, 2, 0
+	invoke SetLevelTile, Level, 7, 2, 2
+	invoke SetLevelTile, Level, 8, 2, 2
+	invoke SetLevelTile, Level, 9, 2, 0
+	invoke SetLevelTile, Level, 10, 2, 1
+	invoke SetLevelTile, Level, 0, 3, 1
+	invoke SetLevelTile, Level, 1, 3, 1
+	invoke SetLevelTile, Level, 2, 3, 3
+	invoke SetLevelTile, Level, 3, 3, 0
+	invoke SetLevelTile, Level, 4, 3, 2
+	invoke SetLevelTile, Level, 5, 3, 2
+	invoke SetLevelTile, Level, 6, 3, 2
+	invoke SetLevelTile, Level, 7, 3, 0
+	invoke SetLevelTile, Level, 8, 3, 0
+	invoke SetLevelTile, Level, 9, 3, 3
+	invoke SetLevelTile, Level, 10, 3, 1
+	invoke SetLevelTile, Level, 0, 4, 1
+	invoke SetLevelTile, Level, 1, 4, 0
+	invoke SetLevelTile, Level, 2, 4, 0
+	invoke SetLevelTile, Level, 3, 4, 2
+	invoke SetLevelTile, Level, 4, 4, 2
+	invoke SetLevelTile, Level, 5, 4, 0
+	invoke SetLevelTile, Level, 6, 4, 0
+	invoke SetLevelTile, Level, 7, 4, 1
+	invoke SetLevelTile, Level, 8, 4, 0
+	invoke SetLevelTile, Level, 9, 4, 1
+	invoke SetLevelTile, Level, 10, 4, 1
+	invoke SetLevelTile, Level, 0, 5, 1
+	invoke SetLevelTile, Level, 1, 5, 0
+	invoke SetLevelTile, Level, 2, 5, 0
+	invoke SetLevelTile, Level, 3, 5, 2
+	invoke SetLevelTile, Level, 4, 5, 0
+	invoke SetLevelTile, Level, 5, 5, 1
+	invoke SetLevelTile, Level, 6, 5, 4
+	invoke SetLevelTile, Level, 7, 5, 0
+	invoke SetLevelTile, Level, 8, 5, 1
+	invoke SetLevelTile, Level, 9, 5, 7
+	invoke SetLevelTile, Level, 10, 5, 6
+	invoke SetLevelTile, Level, 0, 6, 1
+	invoke SetLevelTile, Level, 1, 6, 2
+	invoke SetLevelTile, Level, 2, 6, 1
+	invoke SetLevelTile, Level, 3, 6, 0
+	invoke SetLevelTile, Level, 4, 6, 0
+	invoke SetLevelTile, Level, 5, 6, 2
+	invoke SetLevelTile, Level, 6, 6, 0
+	invoke SetLevelTile, Level, 7, 6, 0
+	invoke SetLevelTile, Level, 8, 6, 0
+	invoke SetLevelTile, Level, 9, 6, 2
+	invoke SetLevelTile, Level, 10, 6, 1
+	invoke SetLevelTile, Level, 0, 7, 1
+	invoke SetLevelTile, Level, 1, 7, 0
+	invoke SetLevelTile, Level, 2, 7, 0
+	invoke SetLevelTile, Level, 3, 7, 0
+	invoke SetLevelTile, Level, 4, 7, 0
+	invoke SetLevelTile, Level, 5, 7, 7
+	invoke SetLevelTile, Level, 6, 7, 2
+	invoke SetLevelTile, Level, 7, 7, 0
+	invoke SetLevelTile, Level, 8, 7, 7
+	invoke SetLevelTile, Level, 9, 7, 4
+	invoke SetLevelTile, Level, 10, 7, 1
+	invoke SetLevelTile, Level, 0, 8, 1
+	invoke SetLevelTile, Level, 1, 8, 1
+	invoke SetLevelTile, Level, 2, 8, 1
+	invoke SetLevelTile, Level, 3, 8, 1
+	invoke SetLevelTile, Level, 4, 8, 1
+	invoke SetLevelTile, Level, 5, 8, 1
+	invoke SetLevelTile, Level, 6, 8, 1
+	invoke SetLevelTile, Level, 7, 8, 1
+	invoke SetLevelTile, Level, 8, 8, 1
+	invoke SetLevelTile, Level, 9, 8, 1
+	invoke SetLevelTile, Level, 10, 8, 1
+	jmp RE_END
+Level3:
+
+RE_END:
+
 	ret
 SokobanRestart endp
 
@@ -263,6 +380,7 @@ SokobanInit proc, GameState: ptr game_state, Platform: ptr platform_state,
 	;invoke LoadBitmap, Platform, Assets, Bitmap_Finish, offset FinishPath
 	invoke LoadFont, Platform, Assets, Font_Debug, offset FontPath, offset FontFace
 	;invoke LoadLevel, GameState, Platform, offset LevelPath
+	invoke SetLevelVar, Level, Level_num, 1
 	invoke SokobanRestart, Level
 	;invoke SaveLevel, GameState, Platform, offset LevelPath
 	;invoke DrawBitmap, GameTransform, Assets, Bitmap_Key, f_1_, f_1_, f1_, f1_, f0_, f1_, f0_, f1_
@@ -282,6 +400,7 @@ SokobanUpdate proc, GameState: ptr game_state, GameInput: ptr game_input, Assets
 	local TryY: s32
 	local Tile: s32
 	local KeyCount: s32
+	local PresentLevel: s32
 	
 	;
 	;Update Code
@@ -289,11 +408,11 @@ SokobanUpdate proc, GameState: ptr game_state, GameInput: ptr game_input, Assets
 	
 	mov dPlayerX, 0
 	mov dPlayerY, 0
-	invoke IsDown, GameInput, Button_Escape
+	invoke IsDown, GameInput, Button_Space
 	test eax, eax
-	jz ESC_NOT_DOWN
-	;invoke SokobanRestart, Level
-ESC_NOT_DOWN:
+	jz SPACE_NOT_DOWN
+	invoke SokobanRestart, Level
+SPACE_NOT_DOWN:
 
 	invoke IsDown, GameInput, Button_Up
 	test eax, eax
@@ -342,9 +461,15 @@ RIGHT_NOT_DOWN:
 	cmp Tile, 4
 	je UD_DOOR
 	cmp Tile, 5
-	je UD_PASSWAY
+	je UD_PASSWAY;DOORCLOSE
 	cmp Tile, 6
 	je UD_ENDPOINT
+	cmp Tile, 7
+	je UD_WALL;HOLE
+	cmp Tile, 8
+	je UD_PASSWAY;FILLEDHOLE
+	cmp Tile, 9
+	je UD_BOX_ON_FILLEDHOLE
 	jmp UD_END
 
 UD_PASSWAY:
@@ -364,9 +489,56 @@ UD_BOX:
 	pop ebx
 	mov edx, Tile
 	test edx, edx
-	jnz UD_END
+	jz UD_PUSH_BOX_TO_PASSWAY
+	cmp edx, 8
+	je UD_PUSH_BOX_TO_FILLEDHOLE
+	cmp edx, 7
+	jne UD_END
+	UD_PUSH_BOX_TO_HOLE:
+	invoke SetLevelTile, level, ebx, ecx, 8
+	invoke SetLevelTile, level, TryX, TryY, 0
+	invoke SetPlayerP, Level, TryX, TryY
+	jmp UD_END
+	UD_PUSH_BOX_TO_PASSWAY:
 	invoke SetLevelTile, level, ebx, ecx, 2
 	invoke SetLevelTile, level, TryX, TryY, 0
+	invoke SetPlayerP, Level, TryX, TryY
+	jmp UD_END
+	UD_PUSH_BOX_TO_FILLEDHOLE:
+	invoke SetLevelTile, level, ebx, ecx, 9
+	invoke SetLevelTile, level, TryX, TryY, 0
+	invoke SetPlayerP, Level, TryX, TryY
+	jmp UD_END
+UD_BOX_ON_FILLEDHOLE:
+	mov ebx, TryX
+	add ebx, dPlayerX
+	mov ecx, TryY
+	add ecx, dPlayerY
+	push ebx
+	push ecx
+	invoke GetLevelTile, level, ebx, ecx, addr Tile
+	pop ecx
+	pop ebx
+	mov edx, Tile
+	test edx, edx
+	jz UD_PUSH_BOX_ON_FILLEDHOLE_TO_PASSWAY
+	cmp edx, 8
+	je UD_PUSH_BOX_ON_FILLEDHOLE_TO_FILLEDHOLE
+	cmp edx, 7
+	jne UD_END
+	UD_PUSH_BOX_ON_FILLEDHOLE_TO_HOLE:
+	invoke SetLevelTile, level, ebx, ecx, 8
+	invoke SetLevelTile, level, TryX, TryY, 8
+	invoke SetPlayerP, Level, TryX, TryY
+	jmp UD_END
+	UD_PUSH_BOX_ON_FILLEDHOLE_TO_PASSWAY:
+	invoke SetLevelTile, level, ebx, ecx, 2
+	invoke SetLevelTile, level, TryX, TryY, 8
+	invoke SetPlayerP, Level, TryX, TryY
+	jmp UD_END
+	UD_PUSH_BOX_ON_FILLEDHOLE_TO_FILLEDHOLE:
+	invoke SetLevelTile, level, ebx, ecx, 9
+	invoke SetLevelTile, level, TryX, TryY, 8
 	invoke SetPlayerP, Level, TryX, TryY
 	jmp UD_END
 UD_KEY:
@@ -386,8 +558,14 @@ UD_DOOR:
 	invoke SetLevelTile, level, TryX, TryY, 5
 	invoke SetPlayerP, Level, TryX, TryY
 	jmp UD_END
-UD_ENDPOINT:
-	invoke SetLevelTile, level, 0, 0, 0;NEXTLEVEL
+UD_ENDPOINT:;NEXTLEVE
+	invoke GetLevelVar, Level, Level_num, addr PresentLevel
+	mov edx, PresentLevel
+	inc edx
+	invoke SetLevelVar, Level, Level_num, edx
+	invoke SokobanRestart, Level
+
+
 
 
 UD_END:
@@ -406,19 +584,23 @@ SokobanRender proc, GameState: ptr game_state, WindowWidth: s32, WindowHeight: s
 	local Plx: s32
 	local Ply: s32
 	local Tile: s32
+	local LevelH: s32
+	local LevelW: s32
 	
-	invoke StartTransformByHeight, GameTransform, f8_, WindowWidth, WindowHeight
-	;invoke DrawBitmap, GameTransform, Assets, Bitmap_Box, f0_, f0_, WindowWidth, WindowHeight, f0_, f0_, f0_, f1_
+	invoke StartTransformByHeight, GameTransform, f16_, WindowWidth, WindowHeight
+	;invoke DrawBitmap, GameTransform, Assets, Bitmap_NULL, f0_, f0_, f16_, f16_, f1_, f1_, f1_, f1_
 	invoke GetPlayerP, Level, addr Plx, addr Ply
 	;
 	;Render Code
 	;
+	invoke GetLevelVar, Level, Level_Width, addr LevelW
+	invoke GetLevelVar, Level, Level_Height, addr LevelH
+	dec LevelW
+	dec LevelH
 	
-	
-	
-	mov ecx, 5
+	mov ecx, LevelH
 START_Y:
-		mov ebx, 9
+		mov ebx, LevelW
 	START_X:
 			push ebx
 			push ecx
@@ -457,8 +639,14 @@ START_Y:
 			je RD_DOORCLOSE
 			cmp Tile, 6
 			je RD_ENDPOINT
+			cmp Tile, 7
+			je RD_HOLE
+			cmp Tile, 8
+			je RD_FILLEDHOLE
+			cmp Tile, 9
+			je RD_BOXONFB
 			RD_PASSWAY:
-				invoke DrawBitmap, GameTransform, Assets, Bitmap_Blank, MinX, MinY, MaxX, MaxY, f_5, f_5, f_5, f1_
+				invoke DrawBitmap, GameTransform, Assets, Bitmap_BLank, MinX, MinY, MaxX, MaxY, f1_, f1_, f1_, f_1
 				jmp RD_END_Tile
 			RD_WALL:
 				invoke DrawBitmap, GameTransform, Assets, Bitmap_Wall, MinX, MinY, MaxX, MaxY, f1_, f1_, f1_, f1_
@@ -478,6 +666,16 @@ START_Y:
 			RD_ENDPOINT:
 				invoke DrawBitmap, GameTransform, Assets, Bitmap_Key, MinX, MinY, MaxX, MaxY, f0_, f0_, f0_, f1_
 				jmp RD_END_Tile
+			RD_HOLE:
+				invoke DrawBitmap, GameTransform, Assets, Bitmap_Key, MinX, MinY, MaxX, MaxY, f1_, f_5, f_5, f1_
+				jmp RD_END_Tile
+			RD_FILLEDHOLE:
+				invoke DrawBitmap, GameTransform, Assets, Bitmap_Key, MinX, MinY, MaxX, MaxY, f_5, f1_, f1_, f1_
+				jmp RD_END_Tile
+			RD_BOXONFB:
+				invoke DrawBitmap, GameTransform, Assets, Bitmap_Key, MinX, MinY, MaxX, MaxY, f_5, f_5, f1_, f1_
+				jmp RD_END_Tile
+
 			RD_END_Tile:
 				pop ecx
 				pop ebx

@@ -2,7 +2,7 @@
 
 .code
 OpenglInit proc
-	invoke glClearColor, f1_, f0_, f1_, f1_
+	invoke glClearColor, f_8, f_8, f_8, f1_
 	invoke glEnable, GL_TEXTURE_2D
 	invoke glEnable, GL_BLEND
 	invoke glBlendFunc, GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA
