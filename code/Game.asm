@@ -71,6 +71,12 @@
 ;LoadLevel proc, GameState: ptr game_state, Platform: ptr platform_state, Path: ptr char
 ;Load the game's current level from Path.
 
+;SetLevelVar proc, Level: ptr ptr game_level, Index: s32, Value: s32
+;Set current level's variable at Index as Value.
+
+;GetLevelVar proc, Level: ptr ptr game_level, Index: s32, Value: ptr s32
+;Get current level's variable at Index, returns in {*Value}.
+
 
 .data
 WallPath char "asset/wall.bmp", 0
@@ -113,13 +119,13 @@ SetLevelVar proc uses eax ebx, Level: ptr ptr game_level, Index: s32, Value: s32
 SetLevelVar endp
 
 
-SetLevelDim proc uses eax ebx, Level: ptr ptr game_level, LevelWidth: s32, LevelHeight: s32
+SetLevelDim proc, Level: ptr ptr game_level, LevelWidth: s32, LevelHeight: s32
 	invoke SetLevelVar, Level, Level_Width, LevelWidth
 	invoke SetLevelVar, Level, Level_Height, LevelHeight
 	ret
 SetLevelDim endp
 
-SetPlayerP proc uses eax ebx, Level: ptr ptr game_level, PlayerX: s32, PlayerY: s32
+SetPlayerP proc, Level: ptr ptr game_level, PlayerX: s32, PlayerY: s32
 	invoke SetLevelVar, Level, Level_PlayerX, PlayerX
 	invoke SetLevelVar, Level, Level_PlayerY, PlayerY
 	ret
@@ -142,13 +148,13 @@ SetLevelTile proc uses eax ebx, Level: ptr ptr game_level, X: s32, Y: s32, Value
 SetLevelTile endp
 ;0->' ' 1-># 2->B 3->K 4->DC 5->DO 6->E
 
-GetLevelDim proc uses esi edi ebx, Level: ptr ptr game_level, LevelWidth: ptr s32, LevelHeight: ptr s32
+GetLevelDim proc, Level: ptr ptr game_level, LevelWidth: ptr s32, LevelHeight: ptr s32
 	invoke GetLevelVar, Level, Level_Width, LevelWidth
 	invoke GetLevelVar, Level, Level_Height, LevelHeight
 	ret
 GetLevelDim endp
 
-GetPlayerP proc uses esi edi ebx, Level: ptr ptr game_level, PlayerX: ptr s32, PlayerY: ptr s32
+GetPlayerP proc, Level: ptr ptr game_level, PlayerX: ptr s32, PlayerY: ptr s32
 	invoke GetLevelVar, Level, Level_PlayerX, PlayerX
 	invoke GetLevelVar, Level, Level_PlayerY, PlayerY
 	ret
@@ -292,29 +298,29 @@ ESC_NOT_DOWN:
 	invoke IsDown, GameInput, Button_Up
 	test eax, eax
 	jz UP_NOT_DOWN
-	add dPlayerX, 0
-	add dPlayerY, 1
+	mov dPlayerX, 0
+	mov dPlayerY, 1
 UP_NOT_DOWN:
 
 	invoke IsDown, GameInput, Button_Down
 	test eax, eax
 	jz DOWN_NOT_DOWN
-	add dPlayerX, 0
-	add dPlayerY, -1
+	mov dPlayerX, 0
+	mov dPlayerY, -1
 DOWN_NOT_DOWN:
 
 	invoke IsDown, GameInput, Button_Left
 	test eax, eax
 	jz LEFT_NOT_DOWN
-	add dPlayerX, -1
-	add dPlayerY, 0
+	mov dPlayerX, -1
+	mov dPlayerY, 0
 LEFT_NOT_DOWN:
 
 	invoke IsDown, GameInput, Button_Right
 	test eax, eax
 	jz RIGHT_NOT_DOWN
-	add dPlayerX, 1
-	add dPlayerY, 0
+	mov dPlayerX, 1
+	mov dPlayerY, 0
 RIGHT_NOT_DOWN: 
 
 	invoke GetPlayerP, level, addr PlayerX, addr PlayerY
@@ -452,13 +458,13 @@ START_Y:
 			cmp Tile, 6
 			je RD_ENDPOINT
 			RD_PASSWAY:
-				invoke DrawBitmap, GameTransform, Assets, Bitmap_NULL, MinX, MinY, MaxX, MaxY, f1_, f0_, f1_, f_05
+				invoke DrawBitmap, GameTransform, Assets, Bitmap_Blank, MinX, MinY, MaxX, MaxY, f_5, f_5, f_5, f1_
 				jmp RD_END_Tile
 			RD_WALL:
-				invoke DrawBitmap, GameTransform, Assets, Bitmap_Key, MinX, MinY, MaxX, MaxY, f1_, f1_, f0_, f_5
+				invoke DrawBitmap, GameTransform, Assets, Bitmap_Wall, MinX, MinY, MaxX, MaxY, f1_, f1_, f1_, f1_
 				jmp RD_END_Tile
 			RD_BOX:
-				invoke DrawBitmap, GameTransform, Assets, Bitmap_Key, MinX, MinY, MaxX, MaxY, f0_, f1_, f1_, f1_
+				invoke DrawBitmap, GameTransform, Assets, Bitmap_Box, MinX, MinY, MaxX, MaxY, f1_, f1_, f1_, f1_
 				jmp RD_END_Tile
 			RD_KEY:
 				invoke DrawBitmap, GameTransform, Assets, Bitmap_Key, MinX, MinY, MaxX, MaxY, f1_, f1_, f1_, f1_

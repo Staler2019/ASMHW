@@ -19,8 +19,8 @@ OpenglAllocateTexture proc, _Width: s32, _Height: s32, Buffer: ptr u32, Result: 
 	invoke glGenTextures, 1, Result
 	mov eax, Result
 	invoke glBindTexture, GL_TEXTURE_2D, [eax]
-	invoke glTexParameteri, GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT
-	invoke glTexParameteri, GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT
+	invoke glTexParameteri, GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE
+	invoke glTexParameteri, GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE
 	invoke glTexParameteri, GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR
 	invoke glTexParameteri, GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR
 	invoke glTexImage2D, GL_TEXTURE_2D, 0, GL_RGBA8, _Width, _Height, 0, GL_BGRA, GL_UNSIGNED_BYTE, Buffer
