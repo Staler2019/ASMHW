@@ -108,6 +108,18 @@ LoadBitmap proc, Platform: ptr platform_state, Assets: ptr game_asset, BitmapId:
 	mov_mem [edi].BitmapHeight, (bmp_header ptr[esi]).biHeight, eax
 	add esi, (bmp_header ptr[esi]).BitmapOffset
 	mov [edi].Buffer, esi
+;	mov ecx, [edi].BitmapWidth
+;	imul ecx, [edi].BitmapHeight
+;START_PIXEL_OPS:
+;	cmp ecx, 0
+;	jle END_PIXEL_OPS
+;	mov ebx, [esi]
+;	or ebx, 0ff000000h
+;	mov [esi], ebx
+;	add esi, 4
+;	dec ecx
+;	jmp START_PIXEL_OPS
+;END_PIXEL_OPS:
 	mov esi, Assets
 	mov eax, BitmapId
 	lea esi, [(game_asset ptr[esi]).BitmapHandles + (sizeof u32)*eax]
@@ -526,9 +538,6 @@ GameInit proc, GameState: ptr game_state, Platform: ptr platform_state
 	lea_mem Level, (game_state ptr[eax]).Level, ebx
 	
 	invoke SokobanInit, GameState, Platform, Assets, GameTransform, ScreenTransform, Level
-	
-	;invoke SaveLevel, GameState, Platform, offset LevelPath
-	invoke LoadLevel, GameState, Platform, offset LevelPath
 	ret
 GameInit endp
 

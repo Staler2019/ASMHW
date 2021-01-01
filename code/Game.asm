@@ -73,8 +73,147 @@
 
 
 .data
-
+WallPath char "asset/wall.bmp", 0
+BlankPath char "asset/blank.bmp", 0
+DoorOpenPath char "asset/dooropen.bmp", 0
+DoorClosePath char "asset/doorclose.bmp", 0
+EndPointPath char "asset/endpoint.bmp", 0
+FinishPath char "asset/finish.bmp", 0
+	
 .code
+
+SetLevelDim proc uses eax ebx, Level: ptr ptr game_level, LevelWidth: s32, LevelHeight: s32
+	mov eax, Level
+	mov eax, [eax]
+	mov_mem (game_level ptr[eax]).LevelWidth, LevelWidth, ebx
+	mov_mem (game_level ptr[eax]).LevelHeight, LevelHeight, ebx
+	ret
+SetLevelDim endp
+
+SetPlayerP proc uses eax ebx, Level: ptr ptr game_level, PlayerX: s32, PlayerY: s32
+	mov eax, Level
+	mov eax, [eax]
+	mov_mem (game_level ptr[eax]).PlayerX, PlayerX, ebx
+	mov_mem (game_level ptr[eax]).PlayerY, PlayerY, ebx
+	ret
+SetPlayerP endp
+
+SetLevelTile proc uses eax ebx, Level: ptr ptr game_level, X: s32, Y: s32, Value: s32
+	mov eax, Level
+	mov eax, [eax]
+	mov ebx, (game_level ptr[eax]).LevelWidth
+	imul ebx, Y
+	add ebx, X
+	lea eax, (game_level ptr[eax]).LevelMap
+	add eax, ebx
+	lea ebx, Value
+	mov bl, [ebx]
+	mov [eax], bl
+	ret
+SetLevelTile endp
+;0->' ' 1-># 2->B 3->K 4->DC 5->DO 6->E
+
+GetLevelDim proc uses esi edi ebx, Level: ptr ptr game_level, LevelWidth: ptr s32, LevelHeight: ptr s32
+	mov esi, Level
+	mov esi, [esi]
+	mov edi, LevelWidth
+	mov_mem [s32 ptr[edi]], (game_level ptr[esi]).LevelWidth, ebx
+	mov edi, LevelHeight
+	mov_mem [s32 ptr[edi]], (game_level ptr[esi]).LevelHeight, ebx
+	ret
+GetLevelDim endp
+
+GetPlayerP proc uses esi edi ebx, Level: ptr ptr game_level, PlayerX: ptr s32, PlayerY: ptr s32
+	mov esi, Level
+	mov esi, [esi]
+	mov edi, PlayerX
+	mov_mem [s32 ptr[edi]], (game_level ptr[esi]).PlayerX, ebx
+	mov edi, PlayerY
+	mov_mem [s32 ptr[edi]], (game_level ptr[esi]).PlayerY, ebx
+	ret
+GetPlayerP endp
+
+GetLevelTile proc uses edi eax ebx, Level: ptr ptr game_level, X: s32, Y: s32, Value: ptr s32
+	mov eax, Level
+	mov eax, [eax]
+	mov ebx, (game_level ptr[eax]).LevelWidth
+	imul ebx, Y
+	add ebx, X
+	lea eax, (game_level ptr[eax]).LevelMap
+	add eax, ebx
+	mov edi, Value
+	movzx ebx, [u8 ptr[eax]]
+	mov [s32 ptr[edi]], ebx
+	ret
+GetLevelTile endp
+
+SokobanRestart proc, Level: ptr ptr game_level
+	invoke SetLevelDim, Level, 10, 6
+	invoke SetPlayerP, Level, 1, 1
+	invoke SetLevelTile, Level, 0, 0, 1
+	invoke SetLevelTile, Level, 1, 0, 1
+	invoke SetLevelTile, Level, 2, 0, 1
+	invoke SetLevelTile, Level, 3, 0, 1
+	invoke SetLevelTile, Level, 4, 0, 1
+	invoke SetLevelTile, Level, 5, 0, 1
+	invoke SetLevelTile, Level, 6, 0, 1
+	invoke SetLevelTile, Level, 7, 0, 1
+	invoke SetLevelTile, Level, 8, 0, 1
+	invoke SetLevelTile, Level, 9, 0, 1
+	invoke SetLevelTile, Level, 0, 1, 1
+	invoke SetLevelTile, Level, 1, 1, 0
+	invoke SetLevelTile, Level, 2, 1, 1
+	invoke SetLevelTile, Level, 3, 1, 3
+	invoke SetLevelTile, Level, 4, 1, 1
+	invoke SetLevelTile, Level, 5, 1, 1
+	invoke SetLevelTile, Level, 6, 1, 0
+	invoke SetLevelTile, Level, 7, 1, 0
+	invoke SetLevelTile, Level, 8, 1, 0
+	invoke SetLevelTile, Level, 9, 1, 6
+	invoke SetLevelTile, Level, 0, 2, 1
+	invoke SetLevelTile, Level, 1, 2, 0
+	invoke SetLevelTile, Level, 2, 2, 2
+	invoke SetLevelTile, Level, 3, 2, 0
+	invoke SetLevelTile, Level, 4, 2, 2
+	invoke SetLevelTile, Level, 5, 2, 1
+	invoke SetLevelTile, Level, 6, 2, 0
+	invoke SetLevelTile, Level, 7, 2, 2
+	invoke SetLevelTile, Level, 8, 2, 0
+	invoke SetLevelTile, Level, 9, 2, 1
+	invoke SetLevelTile, Level, 0, 3, 1
+	invoke SetLevelTile, Level, 1, 3, 2
+	invoke SetLevelTile, Level, 2, 3, 0
+	invoke SetLevelTile, Level, 3, 3, 2
+	invoke SetLevelTile, Level, 4, 3, 0
+	invoke SetLevelTile, Level, 5, 3, 1
+	invoke SetLevelTile, Level, 6, 3, 2
+	invoke SetLevelTile, Level, 7, 3, 2
+	invoke SetLevelTile, Level, 8, 3, 2
+	invoke SetLevelTile, Level, 9, 3, 1
+	invoke SetLevelTile, Level, 0, 4, 1
+	invoke SetLevelTile, Level, 1, 4, 0
+	invoke SetLevelTile, Level, 2, 4, 2
+	invoke SetLevelTile, Level, 3, 4, 0
+	invoke SetLevelTile, Level, 4, 4, 0
+	invoke SetLevelTile, Level, 5, 4, 4
+	invoke SetLevelTile, Level, 6, 4, 0
+	invoke SetLevelTile, Level, 7, 4, 2
+	invoke SetLevelTile, Level, 8, 4, 2
+	invoke SetLevelTile, Level, 9, 4, 1
+	invoke SetLevelTile, Level, 0, 5, 1
+	invoke SetLevelTile, Level, 1, 5, 1
+	invoke SetLevelTile, Level, 2, 5, 1
+	invoke SetLevelTile, Level, 3, 5, 1
+	invoke SetLevelTile, Level, 4, 5, 1
+	invoke SetLevelTile, Level, 5, 5, 1
+	invoke SetLevelTile, Level, 6, 5, 1
+	invoke SetLevelTile, Level, 7, 5, 1
+	invoke SetLevelTile, Level, 8, 5, 1
+	invoke SetLevelTile, Level, 9, 5, 1
+	invoke SetLevelTile, Level, 255, 255, 0
+	ret
+SokobanRestart endp
+
 SokobanInit proc, GameState: ptr game_state, Platform: ptr platform_state, 
 	Assets: ptr game_asset, GameTransform: ptr render_transform, ScreenTransform: ptr render_transform, 
 	Level: ptr ptr game_level
@@ -82,39 +221,147 @@ SokobanInit proc, GameState: ptr game_state, Platform: ptr platform_state,
 	;
 	;Init Code
 	;
+	
 	invoke SetCameraP, GameTransform, f4_, f4_
 	invoke LoadBitmap, Platform, Assets, Bitmap_Box, offset BoxPath
 	invoke LoadBitmap, Platform, Assets, Bitmap_Player, offset PlayerPath
 	invoke LoadBitmap, Platform, Assets, Bitmap_Key, offset KeyPath
+	invoke LoadBitmap, Platform, Assets, Bitmap_Wall, offset WallPath
+	invoke LoadBitmap, Platform, Assets, Bitmap_NULL, offset BlankPath
+	;invoke LoadBitmap, Platform, Assets, Bitmap_DoorOpen, offset DoorOpenPath
+	;invoke LoadBitmap, Platform, Assets, Bitmap_DoorClose, offset DoorClosePath
+	;invoke LoadBitmap, Platform, Assets, Bitmap_EndPoint, offset EndPointPath 
+	;invoke LoadBitmap, Platform, Assets, Bitmap_Finish, offset FinishPath
 	invoke LoadFont, Platform, Assets, Font_Debug, offset FontPath, offset FontFace
-	
-	
+	invoke LoadLevel, GameState, Platform, offset LevelPath
+	invoke SokobanRestart, Level
+	;invoke SaveLevel, GameState, Platform, offset LevelPath
+	;invoke DrawBitmap, GameTransform, Assets, Bitmap_Key, f_1_, f_1_, f1_, f1_, f0_, f1_, f0_, f1_
 	ret
 SokobanInit endp
+
+
 
 SokobanUpdate proc, GameState: ptr game_state, GameInput: ptr game_input, Assets: ptr game_asset, 
 	GameTransform: ptr render_transform, ScreenTransform: ptr render_transform, Level: ptr ptr game_level, 
 	WindowWidth: s32, WindowHeight: s32
+	local PlayerX: s32
+	local PlayerY: s32
+	local dPlayerX: s32
+	local dPlayerY: s32
+	local TryX: s32
+	local TryY: s32
+	local Tile: s32
+	local KeyCount: s32
 	
 	;
 	;Update Code
 	;
 	
-	
+	mov dPlayerX, 0
+	mov dPlayerY, 0
+	invoke IsDown, GameInput, Button_Escape
+	test eax, eax
+	jz ESC_NOT_DOWN
+	;invoke SokobanRestart, Level
+ESC_NOT_DOWN:
+
 	invoke IsDown, GameInput, Button_Up
 	test eax, eax
 	jz UP_NOT_DOWN
-	invoke AddCameraP, GameTransform, f0_, f_05
+	add dPlayerX, 0
+	add dPlayerY, 1
 UP_NOT_DOWN:
 
 	invoke IsDown, GameInput, Button_Down
 	test eax, eax
 	jz DOWN_NOT_DOWN
-	mov edx, GameState
-	movss xmm0, (game_state ptr[edx]).GameTransform.CameraY
-	subss xmm0, f_05
-	movss (game_state ptr[edx]).GameTransform.CameraY, xmm0
+	add dPlayerX, 0
+	add dPlayerY, -1
 DOWN_NOT_DOWN:
+
+	invoke IsDown, GameInput, Button_Left
+	test eax, eax
+	jz LEFT_NOT_DOWN
+	add dPlayerX, -1
+	add dPlayerY, 0
+LEFT_NOT_DOWN:
+
+	invoke IsDown, GameInput, Button_Right
+	test eax, eax
+	jz RIGHT_NOT_DOWN
+	add dPlayerX, 1
+	add dPlayerY, 0
+RIGHT_NOT_DOWN: 
+
+	invoke GetPlayerP, level, addr PlayerX, addr PlayerY
+	mov ebx, PlayerX
+	add ebx, dPlayerX
+	mov TryX, ebx
+	mov ebx, PlayerY
+	add ebx, dPlayerY
+	mov TryY, ebx
+	invoke GetLevelTile, level, TryX, TryY, addr Tile
+	cmp Tile, 0
+	je UD_PASSWAY
+	cmp Tile, 1
+	je UD_WALL
+	cmp Tile, 2
+	je UD_BOX
+	cmp Tile, 3
+	je UD_KEY
+	cmp Tile, 4
+	je UD_DOOR
+	cmp Tile, 5
+	je UD_PASSWAY
+	cmp Tile, 6
+	je UD_ENDPOINT
+	jmp UD_END
+
+UD_PASSWAY:
+	invoke SetPlayerP, Level, TryX, TryY
+	jmp UD_END
+UD_WALL:
+	jmp UD_END
+UD_BOX:
+	mov ebx, TryX
+	add ebx, dPlayerX
+	mov ecx, TryY
+	add ecx, dPlayerY
+	push ebx
+	push ecx
+	invoke GetLevelTile, level, ebx, ecx, addr Tile
+	pop ecx
+	pop ebx
+	mov edx, Tile
+	test edx, edx
+	jnz UD_END
+	invoke SetLevelTile, level, ebx, ecx, 2
+	invoke SetLevelTile, level, TryX, TryY, 0
+	invoke SetPlayerP, Level, TryX, TryY
+	jmp UD_END
+UD_KEY:
+	invoke SetLevelTile, level, TryX, TryY, 0
+	invoke SetPlayerP, Level, TryX, TryY
+	invoke GetLevelTile, level, 255, 255, addr KeyCount
+	inc KeyCount
+	invoke SetLevelTile, level, 255, 255, KeyCount
+	jmp UD_END
+UD_DOOR:
+	invoke GetLevelTile, level, 255, 255, addr KeyCount
+	mov edx, KeyCount
+	test edx, edx
+	jz UD_END
+	dec KeyCount
+	invoke SetLevelTile, level, 255, 255, KeyCount
+	invoke SetLevelTile, level, TryX, TryY, 5
+	invoke SetPlayerP, Level, TryX, TryY
+	jmp UD_END
+UD_ENDPOINT:
+	invoke SetLevelTile, level, 0, 0, 0;NEXTLEVEL
+
+
+UD_END:
 	
 	ret
 SokobanUpdate endp
@@ -127,50 +374,111 @@ SokobanRender proc, GameState: ptr game_state, WindowWidth: s32, WindowHeight: s
 	local MinY: f32
 	local MaxX: f32
 	local MaxY: f32
+	local Plx: s32
+	local Ply: s32
+	local Tile: s32
 	
 	invoke StartTransformByHeight, GameTransform, f8_, WindowWidth, WindowHeight
+	;invoke DrawBitmap, GameTransform, Assets, Bitmap_Box, f0_, f0_, WindowWidth, WindowHeight, f0_, f0_, f0_, f1_
+	invoke GetPlayerP, Level, addr Plx, addr Ply
 	;
 	;Render Code
 	;
 	
 	
 	
-	mov ecx, 8
+	mov ecx, 5
 START_Y:
-	cmp ecx, 0
-	jle END_Y
 		mov ebx, 9
 	START_X:
-		cmp ebx, 0
-		jle END_X
+			push ebx
+			push ecx
+
 			mov eax, ebx
 			cvtsi2ss xmm0, eax
 			movss MinX, xmm0
+
 			mov eax, ecx
+			add eax, 1
 			cvtsi2ss xmm0, eax
 			movss MinY, xmm0
+
 			mov eax, ebx
 			add eax, 1
 			cvtsi2ss xmm0, eax
 			movss MaxX, xmm0
+
 			mov eax, ecx
-			add eax, 1
+			add eax, 2
 			cvtsi2ss xmm0, eax
 			movss MaxY, xmm0
-			invoke DrawBitmap, GameTransform, Assets, Bitmap_Player, MinX, MinY, MaxX, MaxY, f1_, f1_, f1_, f1_
+
+			invoke GetLevelTile, Level, ebx, ecx, addr Tile
+			cmp Tile, 0
+			je RD_PASSWAY
+			cmp Tile, 1
+			je RD_WALL
+			cmp Tile, 2
+			je RD_BOX
+			cmp Tile, 3
+			je RD_KEY
+			cmp Tile, 4
+			je RD_DOOROPEN
+			cmp Tile, 5
+			je RD_DOORCLOSE
+			cmp Tile, 6
+			je RD_ENDPOINT
+			RD_PASSWAY:
+				invoke DrawBitmap, GameTransform, Assets, Bitmap_NULL, MinX, MinY, MaxX, MaxY, f1_, f0_, f1_, f_05
+				jmp RD_END_Tile
+			RD_WALL:
+				invoke DrawBitmap, GameTransform, Assets, Bitmap_Key, MinX, MinY, MaxX, MaxY, f1_, f1_, f0_, f_5
+				jmp RD_END_Tile
+			RD_BOX:
+				invoke DrawBitmap, GameTransform, Assets, Bitmap_Key, MinX, MinY, MaxX, MaxY, f0_, f1_, f1_, f1_
+				jmp RD_END_Tile
+			RD_KEY:
+				invoke DrawBitmap, GameTransform, Assets, Bitmap_Key, MinX, MinY, MaxX, MaxY, f1_, f1_, f1_, f1_
+				jmp RD_END_Tile
+			RD_DOOROPEN:
+				invoke DrawBitmap, GameTransform, Assets, Bitmap_Key, MinX, MinY, MaxX, MaxY, f0_, f0_, f1_, f1_
+				jmp RD_END_Tile
+			RD_DOORCLOSE:
+				invoke DrawBitmap, GameTransform, Assets, Bitmap_Key, MinX, MinY, MaxX, MaxY, f1_, f0_, f0_, f1_
+				jmp RD_END_Tile
+			RD_ENDPOINT:
+				invoke DrawBitmap, GameTransform, Assets, Bitmap_Key, MinX, MinY, MaxX, MaxY, f0_, f0_, f0_, f1_
+				jmp RD_END_Tile
+			RD_END_Tile:
+				pop ecx
+				pop ebx
+				cmp ebx, Plx
+				jne RD_END_Player
+				cmp ecx, Ply
+				jne RD_END_Player
+				push ebx
+				push ecx
+				invoke DrawBitmap, GameTransform, Assets, Bitmap_Player, MinX, MinY, MaxX, MaxY, f1_, f1_, f1_, f1_
+				pop ecx
+				pop ebx
+			RD_END_Player:
+		cmp ebx, 0
+		jle END_X
 		dec ebx
 		jmp START_X
 	END_X:
+	cmp ecx, 0
+	jle END_Y
 	dec ecx
 	jmp START_Y
 END_Y:
-	invoke DrawBitmap, GameTransform, Assets, Bitmap_Key, f0_, f0_, f1_, f1_, f0_, f1_, f0_, f_5
-	invoke DrawString, GameTransform, Assets, 
-		offset TestStr, Font_Debug, f0_, f0_, f1_, AlignX_ToLeft, AlignY_ToBottom, f1_, f1_, f1_, f1_
-	invoke DrawString, GameTransform, Assets, 
-		offset TestStr, Font_Debug, f0_, f0_, f1_, AlignX_ToLeft, AlignY_ToTop, f1_, f1_, f1_, f1_
-	invoke DrawString, ScreenTransform, Assets, 
-		offset TestStr, Font_Debug, f100_, f0_, f100_, AlignX_ToMiddle, AlignY_ToBottom, f1_, f1_, f1_, f1_
+	;invoke DrawBitmap, GameTransform, Assets, Bitmap_Key, f0_, f0_, f1_, f1_, f0_, f1_, f0_, f_5
+	;invoke DrawString, GameTransform, Assets, 
+		;offset TestStr, Font_Debug, f0_, f0_, f1_, AlignX_ToLeft, AlignY_ToBottom, f1_, f1_, f1_, f1_
+	;invoke DrawString, GameTransform, Assets, 
+		;offset TestStr, Font_Debug, f0_, f0_, f1_, AlignX_ToLeft, AlignY_ToTop, f1_, f1_, f1_, f1_
+	;invoke DrawString, ScreenTransform, Assets, 
+		;offset TestStr, Font_Debug, f100_, f0_, f100_, AlignX_ToMiddle, AlignY_ToBottom, f1_, f1_, f1_, f1_
 	
 	
 	ret

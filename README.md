@@ -67,5 +67,5 @@ GameRender(GameState: ptr game_state, WindowWidth: s32, WindowHeight: s32);
 OpenglInit();
 OpenglAllocateTexture(_Width: s32, _Height: s32, Buffer: ptr u32, Result: ptr u32);
 OpenglQuad(MinX: f32, MinY: f32, MaxX: f32, MaxY: f32, R: f32, G: f32, B: f32, A: f32);
-OpenglTexturedQuad(MinX: f32, MinY: f32, MaxX: f32, MaxY: f32, R: f32, G: f32, B: f32, A: f32, TextureHandle: u32); -->
-```
+OpenglTexturedQuad(MinX: f32, MinY: f32, MaxX: f32, MaxY: f32, R: f32, G: f32, B: f32, A: f32, TextureHandle: u32);
+``` -->

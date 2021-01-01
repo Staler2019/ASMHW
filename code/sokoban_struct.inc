@@ -60,8 +60,8 @@ render_transform ends
 game_level struct
 	LevelWidth s32 ?
 	LevelHeight s32 ?
-	PlayerX f32 ?
-	PlayerY f32 ?
+	PlayerX s32 ?
+	PlayerY s32 ?
 	LevelMap u8 65536 dup(?)
 game_level ends
 
