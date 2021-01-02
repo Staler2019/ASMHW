@@ -250,7 +250,7 @@ Level1:
 	invoke SetLevelTile, Level, 9, 5, 1
 	jmp RE_END
 Level2:
-	invoke SetLevelDim, Level, 11, 9
+	invoke SetLevelDim, Level, 11, 10
 	invoke SetPlayerP, Level, 2, 1
 	invoke SetLevelVar, Level, Level_KeyCount, 0
 	invoke SetLevelTile, Level, 0, 0, 1
@@ -287,7 +287,7 @@ Level2:
 	invoke SetLevelTile, Level, 9, 2, 0
 	invoke SetLevelTile, Level, 10, 2, 1
 	invoke SetLevelTile, Level, 0, 3, 1
-	invoke SetLevelTile, Level, 1, 3, 1
+	invoke SetLevelTile, Level, 1, 3, 0
 	invoke SetLevelTile, Level, 2, 3, 3
 	invoke SetLevelTile, Level, 3, 3, 0
 	invoke SetLevelTile, Level, 4, 3, 2
@@ -298,9 +298,9 @@ Level2:
 	invoke SetLevelTile, Level, 9, 3, 3
 	invoke SetLevelTile, Level, 10, 3, 1
 	invoke SetLevelTile, Level, 0, 4, 1
-	invoke SetLevelTile, Level, 1, 4, 0
+	invoke SetLevelTile, Level, 1, 4, 7
 	invoke SetLevelTile, Level, 2, 4, 0
-	invoke SetLevelTile, Level, 3, 4, 2
+	invoke SetLevelTile, Level, 3, 4, 1
 	invoke SetLevelTile, Level, 4, 4, 2
 	invoke SetLevelTile, Level, 5, 4, 0
 	invoke SetLevelTile, Level, 6, 4, 0
@@ -310,8 +310,8 @@ Level2:
 	invoke SetLevelTile, Level, 10, 4, 1
 	invoke SetLevelTile, Level, 0, 5, 1
 	invoke SetLevelTile, Level, 1, 5, 0
-	invoke SetLevelTile, Level, 2, 5, 0
-	invoke SetLevelTile, Level, 3, 5, 2
+	invoke SetLevelTile, Level, 2, 5, 7
+	invoke SetLevelTile, Level, 3, 5, 0
 	invoke SetLevelTile, Level, 4, 5, 0
 	invoke SetLevelTile, Level, 5, 5, 1
 	invoke SetLevelTile, Level, 6, 5, 4
@@ -320,40 +320,292 @@ Level2:
 	invoke SetLevelTile, Level, 9, 5, 7
 	invoke SetLevelTile, Level, 10, 5, 6
 	invoke SetLevelTile, Level, 0, 6, 1
-	invoke SetLevelTile, Level, 1, 6, 2
-	invoke SetLevelTile, Level, 2, 6, 1
-	invoke SetLevelTile, Level, 3, 6, 0
-	invoke SetLevelTile, Level, 4, 6, 0
-	invoke SetLevelTile, Level, 5, 6, 2
+	invoke SetLevelTile, Level, 1, 6, 0
+	invoke SetLevelTile, Level, 2, 6, 0
+	invoke SetLevelTile, Level, 3, 6, 2
+	invoke SetLevelTile, Level, 4, 6, 1
+	invoke SetLevelTile, Level, 5, 6, 0
 	invoke SetLevelTile, Level, 6, 6, 0
 	invoke SetLevelTile, Level, 7, 6, 0
-	invoke SetLevelTile, Level, 8, 6, 0
+	invoke SetLevelTile, Level, 8, 6, 1
 	invoke SetLevelTile, Level, 9, 6, 2
 	invoke SetLevelTile, Level, 10, 6, 1
 	invoke SetLevelTile, Level, 0, 7, 1
 	invoke SetLevelTile, Level, 1, 7, 0
-	invoke SetLevelTile, Level, 2, 7, 0
+	invoke SetLevelTile, Level, 2, 7, 2
 	invoke SetLevelTile, Level, 3, 7, 0
-	invoke SetLevelTile, Level, 4, 7, 0
-	invoke SetLevelTile, Level, 5, 7, 7
+	invoke SetLevelTile, Level, 4, 7, 7
+	invoke SetLevelTile, Level, 5, 7, 0
 	invoke SetLevelTile, Level, 6, 7, 2
 	invoke SetLevelTile, Level, 7, 7, 0
-	invoke SetLevelTile, Level, 8, 7, 7
+	invoke SetLevelTile, Level, 8, 7, 1
 	invoke SetLevelTile, Level, 9, 7, 4
 	invoke SetLevelTile, Level, 10, 7, 1
 	invoke SetLevelTile, Level, 0, 8, 1
-	invoke SetLevelTile, Level, 1, 8, 1
-	invoke SetLevelTile, Level, 2, 8, 1
-	invoke SetLevelTile, Level, 3, 8, 1
+	invoke SetLevelTile, Level, 1, 8, 7
+	invoke SetLevelTile, Level, 2, 8, 0
+	invoke SetLevelTile, Level, 3, 8, 0
 	invoke SetLevelTile, Level, 4, 8, 1
-	invoke SetLevelTile, Level, 5, 8, 1
-	invoke SetLevelTile, Level, 6, 8, 1
-	invoke SetLevelTile, Level, 7, 8, 1
-	invoke SetLevelTile, Level, 8, 8, 1
-	invoke SetLevelTile, Level, 9, 8, 1
+	invoke SetLevelTile, Level, 5, 8, 0
+	invoke SetLevelTile, Level, 6, 8, 0
+	invoke SetLevelTile, Level, 7, 8, 0
+	invoke SetLevelTile, Level, 8, 8, 7
+	invoke SetLevelTile, Level, 9, 8, 0
 	invoke SetLevelTile, Level, 10, 8, 1
+	invoke SetLevelTile, Level, 0, 9, 1
+	invoke SetLevelTile, Level, 1, 9, 1
+	invoke SetLevelTile, Level, 2, 9, 1
+	invoke SetLevelTile, Level, 3, 9, 1
+	invoke SetLevelTile, Level, 4, 9, 1
+	invoke SetLevelTile, Level, 5, 9, 1
+	invoke SetLevelTile, Level, 6, 9, 1
+	invoke SetLevelTile, Level, 7, 9, 1
+	invoke SetLevelTile, Level, 8, 9, 1
+	invoke SetLevelTile, Level, 9, 9, 1
+	invoke SetLevelTile, Level, 10, 9, 1
 	jmp RE_END
 Level3:
+	invoke SetLevelDim, Level, 17, 14
+	invoke SetPlayerP, Level, 8, 7
+	invoke SetLevelVar, Level, Level_KeyCount, 0
+	invoke SetLevelTile, Level, 0, 0, 1
+	invoke SetLevelTile, Level, 1, 0, 1
+	invoke SetLevelTile, Level, 2, 0, 1
+	invoke SetLevelTile, Level, 3, 0, 1
+	invoke SetLevelTile, Level, 4, 0, 1
+	invoke SetLevelTile, Level, 5, 0, 1
+	invoke SetLevelTile, Level, 6, 0, 1
+	invoke SetLevelTile, Level, 7, 0, 1
+	invoke SetLevelTile, Level, 8, 0, 1
+	invoke SetLevelTile, Level, 9, 0, 1
+	invoke SetLevelTile, Level, 10, 0, 1
+	invoke SetLevelTile, Level, 11, 0, 1
+	invoke SetLevelTile, Level, 12, 0, 1
+	invoke SetLevelTile, Level, 13, 0, 1
+	invoke SetLevelTile, Level, 14, 0, 1
+	invoke SetLevelTile, Level, 15, 0, 1
+	invoke SetLevelTile, Level, 16, 0, 1
+	invoke SetLevelTile, Level, 0, 1, 1
+	invoke SetLevelTile, Level, 1, 1, 7
+	invoke SetLevelTile, Level, 2, 1, 2
+	invoke SetLevelTile, Level, 3, 1, 0
+	invoke SetLevelTile, Level, 4, 1, 2
+	invoke SetLevelTile, Level, 5, 1, 7
+	invoke SetLevelTile, Level, 6, 1, 1
+	invoke SetLevelTile, Level, 7, 1, 2
+	invoke SetLevelTile, Level, 8, 1, 0
+	invoke SetLevelTile, Level, 9, 1, 2
+	invoke SetLevelTile, Level, 10, 1, 1
+	invoke SetLevelTile, Level, 11, 1, 0
+	invoke SetLevelTile, Level, 12, 1, 0
+	invoke SetLevelTile, Level, 13, 1, 0
+	invoke SetLevelTile, Level, 14, 1, 0
+	invoke SetLevelTile, Level, 15, 1, 3
+	invoke SetLevelTile, Level, 16, 1, 1
+	invoke SetLevelTile, Level, 0, 2, 1
+	invoke SetLevelTile, Level, 1, 2, 2
+	invoke SetLevelTile, Level, 2, 2, 0
+	invoke SetLevelTile, Level, 3, 2, 2
+	invoke SetLevelTile, Level, 4, 2, 0
+	invoke SetLevelTile, Level, 5, 2, 4
+	invoke SetLevelTile, Level, 6, 2, 7
+	invoke SetLevelTile, Level, 7, 2, 0
+	invoke SetLevelTile, Level, 8, 2, 0
+	invoke SetLevelTile, Level, 9, 2, 0
+	invoke SetLevelTile, Level, 10, 2, 7
+	invoke SetLevelTile, Level, 11, 2, 7
+	invoke SetLevelTile, Level, 12, 2, 2
+	invoke SetLevelTile, Level, 13, 2, 0
+	invoke SetLevelTile, Level, 14, 2, 2
+	invoke SetLevelTile, Level, 15, 2, 0
+	invoke SetLevelTile, Level, 16, 2, 1
+	invoke SetLevelTile, Level, 0, 3, 1
+	invoke SetLevelTile, Level, 1, 3, 0
+	invoke SetLevelTile, Level, 2, 3, 2
+	invoke SetLevelTile, Level, 3, 3, 7
+	invoke SetLevelTile, Level, 4, 3, 2
+	invoke SetLevelTile, Level, 5, 3, 1
+	invoke SetLevelTile, Level, 6, 3, 0
+	invoke SetLevelTile, Level, 7, 3, 0
+	invoke SetLevelTile, Level, 8, 3, 2
+	invoke SetLevelTile, Level, 9, 3, 0
+	invoke SetLevelTile, Level, 10, 3, 1
+	invoke SetLevelTile, Level, 11, 3, 1
+	invoke SetLevelTile, Level, 12, 3, 1
+	invoke SetLevelTile, Level, 13, 3, 2
+	invoke SetLevelTile, Level, 14, 3, 0
+	invoke SetLevelTile, Level, 15, 3, 2
+	invoke SetLevelTile, Level, 16, 3, 1
+	invoke SetLevelTile, Level, 0, 4, 1
+	invoke SetLevelTile, Level, 1, 4, 2
+	invoke SetLevelTile, Level, 2, 4, 0
+	invoke SetLevelTile, Level, 3, 4, 2
+	invoke SetLevelTile, Level, 4, 4, 7
+	invoke SetLevelTile, Level, 5, 4, 2
+	invoke SetLevelTile, Level, 6, 4, 0
+	invoke SetLevelTile, Level, 7, 4, 0
+	invoke SetLevelTile, Level, 8, 4, 0
+	invoke SetLevelTile, Level, 9, 4, 0
+	invoke SetLevelTile, Level, 10, 4, 2
+	invoke SetLevelTile, Level, 11, 4, 0
+	invoke SetLevelTile, Level, 12, 4, 2
+	invoke SetLevelTile, Level, 13, 4, 0
+	invoke SetLevelTile, Level, 14, 4, 0
+	invoke SetLevelTile, Level, 15, 4, 2
+	invoke SetLevelTile, Level, 16, 4, 1
+	invoke SetLevelTile, Level, 0, 5, 1
+	invoke SetLevelTile, Level, 1, 5, 0
+	invoke SetLevelTile, Level, 2, 5, 2
+	invoke SetLevelTile, Level, 3, 5, 1
+	invoke SetLevelTile, Level, 4, 5, 0
+	invoke SetLevelTile, Level, 5, 5, 2
+	invoke SetLevelTile, Level, 6, 5, 0
+	invoke SetLevelTile, Level, 7, 5, 0
+	invoke SetLevelTile, Level, 8, 5, 2
+	invoke SetLevelTile, Level, 9, 5, 0
+	invoke SetLevelTile, Level, 10, 5, 1
+	invoke SetLevelTile, Level, 11, 5, 4
+	invoke SetLevelTile, Level, 12, 5, 2
+	invoke SetLevelTile, Level, 13, 5, 0
+	invoke SetLevelTile, Level, 14, 5, 2
+	invoke SetLevelTile, Level, 15, 5, 0
+	invoke SetLevelTile, Level, 16, 5, 1
+	invoke SetLevelTile, Level, 0, 6, 1
+	invoke SetLevelTile, Level, 1, 6, 4
+	invoke SetLevelTile, Level, 2, 6, 7
+	invoke SetLevelTile, Level, 3, 6, 1
+	invoke SetLevelTile, Level, 4, 6, 2
+	invoke SetLevelTile, Level, 5, 6, 2
+	invoke SetLevelTile, Level, 6, 6, 1
+	invoke SetLevelTile, Level, 7, 6, 1
+	invoke SetLevelTile, Level, 8, 6, 2
+	invoke SetLevelTile, Level, 9, 6, 1
+	invoke SetLevelTile, Level, 10, 6, 0
+	invoke SetLevelTile, Level, 11, 6, 2
+	invoke SetLevelTile, Level, 12, 6, 0
+	invoke SetLevelTile, Level, 13, 6, 0
+	invoke SetLevelTile, Level, 14, 6, 2
+	invoke SetLevelTile, Level, 15, 6, 0
+	invoke SetLevelTile, Level, 16, 6, 1
+	invoke SetLevelTile, Level, 0, 7, 6
+	invoke SetLevelTile, Level, 1, 7, 2
+	invoke SetLevelTile, Level, 2, 7, 0
+	invoke SetLevelTile, Level, 3, 7, 0
+	invoke SetLevelTile, Level, 4, 7, 1
+	invoke SetLevelTile, Level, 5, 7, 0
+	invoke SetLevelTile, Level, 6, 7, 0
+	invoke SetLevelTile, Level, 7, 7, 2
+	invoke SetLevelTile, Level, 8, 7, 0
+	invoke SetLevelTile, Level, 9, 7, 2
+	invoke SetLevelTile, Level, 10, 7, 0
+	invoke SetLevelTile, Level, 11, 7, 0
+	invoke SetLevelTile, Level, 12, 7, 0
+	invoke SetLevelTile, Level, 13, 7, 2
+	invoke SetLevelTile, Level, 14, 7, 1
+	invoke SetLevelTile, Level, 15, 7, 0
+	invoke SetLevelTile, Level, 16, 7, 1
+	invoke SetLevelTile, Level, 0, 8, 1
+	invoke SetLevelTile, Level, 1, 8, 0
+	invoke SetLevelTile, Level, 2, 8, 2
+	invoke SetLevelTile, Level, 3, 8, 0
+	invoke SetLevelTile, Level, 4, 8, 2
+	invoke SetLevelTile, Level, 5, 8, 0
+	invoke SetLevelTile, Level, 6, 8, 2
+	invoke SetLevelTile, Level, 7, 8, 1
+	invoke SetLevelTile, Level, 8, 8, 2
+	invoke SetLevelTile, Level, 9, 8, 1
+	invoke SetLevelTile, Level, 10, 8, 0
+	invoke SetLevelTile, Level, 11, 8, 2
+	invoke SetLevelTile, Level, 12, 8, 0
+	invoke SetLevelTile, Level, 13, 8, 0
+	invoke SetLevelTile, Level, 14, 8, 2
+	invoke SetLevelTile, Level, 15, 8, 0
+	invoke SetLevelTile, Level, 16, 8, 1
+	invoke SetLevelTile, Level, 0, 9, 1
+	invoke SetLevelTile, Level, 1, 9, 2
+	invoke SetLevelTile, Level, 2, 9, 0
+	invoke SetLevelTile, Level, 3, 9, 2
+	invoke SetLevelTile, Level, 4, 9, 0
+	invoke SetLevelTile, Level, 5, 9, 2
+	invoke SetLevelTile, Level, 6, 9, 0
+	invoke SetLevelTile, Level, 7, 9, 0
+	invoke SetLevelTile, Level, 8, 9, 2
+	invoke SetLevelTile, Level, 9, 9, 7
+	invoke SetLevelTile, Level, 10, 9, 1
+	invoke SetLevelTile, Level, 11, 9, 2
+	invoke SetLevelTile, Level, 12, 9, 2
+	invoke SetLevelTile, Level, 13, 9, 2
+	invoke SetLevelTile, Level, 14, 9, 1
+	invoke SetLevelTile, Level, 15, 9, 0
+	invoke SetLevelTile, Level, 16, 9, 1
+	invoke SetLevelTile, Level, 0, 10, 1
+	invoke SetLevelTile, Level, 1, 10, 0
+	invoke SetLevelTile, Level, 2, 10, 2
+	invoke SetLevelTile, Level, 3, 10, 0
+	invoke SetLevelTile, Level, 4, 10, 2
+	invoke SetLevelTile, Level, 5, 10, 0
+	invoke SetLevelTile, Level, 6, 10, 2
+	invoke SetLevelTile, Level, 7, 10, 0
+	invoke SetLevelTile, Level, 8, 10, 1
+	invoke SetLevelTile, Level, 9, 10, 0
+	invoke SetLevelTile, Level, 10, 10, 0
+	invoke SetLevelTile, Level, 11, 10, 0
+	invoke SetLevelTile, Level, 12, 10, 0
+	invoke SetLevelTile, Level, 13, 10, 0
+	invoke SetLevelTile, Level, 14, 10, 0
+	invoke SetLevelTile, Level, 15, 10, 0
+	invoke SetLevelTile, Level, 16, 10, 1
+	invoke SetLevelTile, Level, 0, 11, 1
+	invoke SetLevelTile, Level, 1, 11, 2
+	invoke SetLevelTile, Level, 2, 11, 0
+	invoke SetLevelTile, Level, 3, 11, 2
+	invoke SetLevelTile, Level, 4, 11, 3
+	invoke SetLevelTile, Level, 5, 11, 2
+	invoke SetLevelTile, Level, 6, 11, 0
+	invoke SetLevelTile, Level, 7, 11, 2
+	invoke SetLevelTile, Level, 8, 11, 1
+	invoke SetLevelTile, Level, 9, 11, 7
+	invoke SetLevelTile, Level, 10, 11, 2
+	invoke SetLevelTile, Level, 11, 11, 2
+	invoke SetLevelTile, Level, 12, 11, 2
+	invoke SetLevelTile, Level, 13, 11, 2
+	invoke SetLevelTile, Level, 14, 11, 2
+	invoke SetLevelTile, Level, 15, 11, 2
+	invoke SetLevelTile, Level, 16, 11, 1
+	invoke SetLevelTile, Level, 0, 12, 1
+	invoke SetLevelTile, Level, 1, 12, 0
+	invoke SetLevelTile, Level, 2, 12, 2
+	invoke SetLevelTile, Level, 3, 12, 0
+	invoke SetLevelTile, Level, 4, 12, 2
+	invoke SetLevelTile, Level, 5, 12, 0
+	invoke SetLevelTile, Level, 6, 12, 2
+	invoke SetLevelTile, Level, 7, 12, 0
+	invoke SetLevelTile, Level, 8, 12, 1
+	invoke SetLevelTile, Level, 9, 12, 0
+	invoke SetLevelTile, Level, 10, 12, 0
+	invoke SetLevelTile, Level, 11, 12, 0
+	invoke SetLevelTile, Level, 12, 12, 0
+	invoke SetLevelTile, Level, 13, 12, 0
+	invoke SetLevelTile, Level, 14, 12, 0
+	invoke SetLevelTile, Level, 15, 12, 3
+	invoke SetLevelTile, Level, 16, 12, 1
+	invoke SetLevelTile, Level, 0, 13, 1
+	invoke SetLevelTile, Level, 1, 13, 1
+	invoke SetLevelTile, Level, 2, 13, 1
+	invoke SetLevelTile, Level, 3, 13, 1
+	invoke SetLevelTile, Level, 4, 13, 1
+	invoke SetLevelTile, Level, 5, 13, 1
+	invoke SetLevelTile, Level, 6, 13, 1
+	invoke SetLevelTile, Level, 7, 13, 1
+	invoke SetLevelTile, Level, 8, 13, 1
+	invoke SetLevelTile, Level, 9, 13, 1
+	invoke SetLevelTile, Level, 10, 13, 1
+	invoke SetLevelTile, Level, 11, 13, 1
+	invoke SetLevelTile, Level, 12, 13, 1
+	invoke SetLevelTile, Level, 13, 13, 1
+	invoke SetLevelTile, Level, 14, 13, 1
+	invoke SetLevelTile, Level, 15, 13, 1
+	invoke SetLevelTile, Level, 16, 13, 1
 
 RE_END:
 
@@ -373,14 +625,14 @@ SokobanInit proc, GameState: ptr game_state, Platform: ptr platform_state,
 	invoke LoadBitmap, Platform, Assets, Bitmap_Player, offset PlayerPath
 	invoke LoadBitmap, Platform, Assets, Bitmap_Key, offset KeyPath
 	invoke LoadBitmap, Platform, Assets, Bitmap_Wall, offset WallPath
-	invoke LoadBitmap, Platform, Assets, Bitmap_NULL, offset BlankPath
+	invoke LoadBitmap, Platform, Assets, Bitmap_Blank, offset BlankPath
 	;invoke LoadBitmap, Platform, Assets, Bitmap_DoorOpen, offset DoorOpenPath
 	;invoke LoadBitmap, Platform, Assets, Bitmap_DoorClose, offset DoorClosePath
 	;invoke LoadBitmap, Platform, Assets, Bitmap_EndPoint, offset EndPointPath 
 	;invoke LoadBitmap, Platform, Assets, Bitmap_Finish, offset FinishPath
 	invoke LoadFont, Platform, Assets, Font_Debug, offset FontPath, offset FontFace
 	;invoke LoadLevel, GameState, Platform, offset LevelPath
-	invoke SetLevelVar, Level, Level_num, 1
+	invoke SetLevelVar, Level, Level_num, 3
 	invoke SokobanRestart, Level
 	;invoke SaveLevel, GameState, Platform, offset LevelPath
 	;invoke DrawBitmap, GameTransform, Assets, Bitmap_Key, f_1_, f_1_, f1_, f1_, f0_, f1_, f0_, f1_
@@ -606,21 +858,22 @@ START_Y:
 			push ecx
 
 			mov eax, ebx
+			add eax, -3
 			cvtsi2ss xmm0, eax
 			movss MinX, xmm0
 
 			mov eax, ecx
-			add eax, 1
+			add eax, -3
 			cvtsi2ss xmm0, eax
 			movss MinY, xmm0
 
 			mov eax, ebx
-			add eax, 1
+			add eax, -2
 			cvtsi2ss xmm0, eax
 			movss MaxX, xmm0
 
 			mov eax, ecx
-			add eax, 2
+			add eax, -2
 			cvtsi2ss xmm0, eax
 			movss MaxY, xmm0
 
@@ -646,7 +899,7 @@ START_Y:
 			cmp Tile, 9
 			je RD_BOXONFB
 			RD_PASSWAY:
-				invoke DrawBitmap, GameTransform, Assets, Bitmap_BLank, MinX, MinY, MaxX, MaxY, f1_, f1_, f1_, f_1
+				invoke DrawBitmap, GameTransform, Assets, Bitmap_Blank, MinX, MinY, MaxX, MaxY, f1_, f1_, f1_, f1_
 				jmp RD_END_Tile
 			RD_WALL:
 				invoke DrawBitmap, GameTransform, Assets, Bitmap_Wall, MinX, MinY, MaxX, MaxY, f1_, f1_, f1_, f1_
@@ -664,7 +917,7 @@ START_Y:
 				invoke DrawBitmap, GameTransform, Assets, Bitmap_Key, MinX, MinY, MaxX, MaxY, f1_, f0_, f0_, f1_
 				jmp RD_END_Tile
 			RD_ENDPOINT:
-				invoke DrawBitmap, GameTransform, Assets, Bitmap_Key, MinX, MinY, MaxX, MaxY, f0_, f0_, f0_, f1_
+				invoke DrawBitmap, GameTransform, Assets, Bitmap_Key, MinX, MinY, MaxX, MaxY, f_5, f_5, f4_, f1_
 				jmp RD_END_Tile
 			RD_HOLE:
 				invoke DrawBitmap, GameTransform, Assets, Bitmap_Key, MinX, MinY, MaxX, MaxY, f1_, f_5, f_5, f1_
@@ -673,7 +926,7 @@ START_Y:
 				invoke DrawBitmap, GameTransform, Assets, Bitmap_Key, MinX, MinY, MaxX, MaxY, f_5, f1_, f1_, f1_
 				jmp RD_END_Tile
 			RD_BOXONFB:
-				invoke DrawBitmap, GameTransform, Assets, Bitmap_Key, MinX, MinY, MaxX, MaxY, f_5, f_5, f1_, f1_
+				invoke DrawBitmap, GameTransform, Assets, Bitmap_Box, MinX, MinY, MaxX, MaxY, f1_, f1_, f1_, f1_
 				jmp RD_END_Tile
 
 			RD_END_Tile:
