@@ -416,7 +416,7 @@ Level3:
 	invoke SetLevelTile, Level, 9, 2, 0
 	invoke SetLevelTile, Level, 10, 2, 7
 	invoke SetLevelTile, Level, 11, 2, 7
-	invoke SetLevelTile, Level, 12, 2, 2
+	invoke SetLevelTile, Level, 12, 2, 0
 	invoke SetLevelTile, Level, 13, 2, 0
 	invoke SetLevelTile, Level, 14, 2, 2
 	invoke SetLevelTile, Level, 15, 2, 0
@@ -635,7 +635,7 @@ SokobanInit proc, GameState: ptr game_state, Platform: ptr platform_state,
 	;invoke LoadBitmap, Platform, Assets, Bitmap_Finish, offset FinishPath
 	invoke LoadFont, Platform, Assets, Font_Debug, offset FontPath, offset FontFace
 	;invoke LoadLevel, GameState, Platform, offset LevelPath
-	invoke SetLevelVar, Level, Level_num, 3
+	invoke SetLevelVar, Level, Level_num, 1
 	invoke SokobanRestart, Level, GameTransform
 	;invoke SaveLevel, GameState, Platform, offset LevelPath
 	;invoke DrawBitmap, GameTransform, Assets, Bitmap_Key, f_1_, f_1_, f1_, f1_, f0_, f1_, f0_, f1_
