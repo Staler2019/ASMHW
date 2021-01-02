@@ -176,7 +176,7 @@ GetLevelTile proc uses edi eax ebx, Level: ptr ptr game_level, X: s32, Y: s32, V
 	ret
 GetLevelTile endp
 
-SokobanRestart proc, Level: ptr ptr game_level
+SokobanRestart proc uses eax edx ebx, Level: ptr ptr game_level, GameTransform: ptr render_transform
 	local PresentLevel:s32
 	invoke GetLevelVar, Level, Level_num, addr PresentLevel
 	cmp PresentLevel, 1
@@ -248,6 +248,7 @@ Level1:
 	invoke SetLevelTile, Level, 7, 5, 1
 	invoke SetLevelTile, Level, 8, 5, 1
 	invoke SetLevelTile, Level, 9, 5, 1
+	invoke SetCameraP, GameTransform, f2_, f0_
 	jmp RE_END
 Level2:
 	invoke SetLevelDim, Level, 11, 10
@@ -363,6 +364,7 @@ Level2:
 	invoke SetLevelTile, Level, 8, 9, 1
 	invoke SetLevelTile, Level, 9, 9, 1
 	invoke SetLevelTile, Level, 10, 9, 1
+	invoke SetCameraP, GameTransform, f3_, f1_
 	jmp RE_END
 Level3:
 	invoke SetLevelDim, Level, 17, 14
@@ -606,8 +608,10 @@ Level3:
 	invoke SetLevelTile, Level, 14, 13, 1
 	invoke SetLevelTile, Level, 15, 13, 1
 	invoke SetLevelTile, Level, 16, 13, 1
+	invoke SetCameraP, GameTransform, f5_, f4_
 
 RE_END:
+	
 
 	ret
 SokobanRestart endp
@@ -620,7 +624,6 @@ SokobanInit proc, GameState: ptr game_state, Platform: ptr platform_state,
 	;Init Code
 	;
 	
-	invoke SetCameraP, GameTransform, f4_, f4_
 	invoke LoadBitmap, Platform, Assets, Bitmap_Box, offset BoxPath
 	invoke LoadBitmap, Platform, Assets, Bitmap_Player, offset PlayerPath
 	invoke LoadBitmap, Platform, Assets, Bitmap_Key, offset KeyPath
@@ -633,7 +636,7 @@ SokobanInit proc, GameState: ptr game_state, Platform: ptr platform_state,
 	invoke LoadFont, Platform, Assets, Font_Debug, offset FontPath, offset FontFace
 	;invoke LoadLevel, GameState, Platform, offset LevelPath
 	invoke SetLevelVar, Level, Level_num, 3
-	invoke SokobanRestart, Level
+	invoke SokobanRestart, Level, GameTransform
 	;invoke SaveLevel, GameState, Platform, offset LevelPath
 	;invoke DrawBitmap, GameTransform, Assets, Bitmap_Key, f_1_, f_1_, f1_, f1_, f0_, f1_, f0_, f1_
 	ret
@@ -663,7 +666,7 @@ SokobanUpdate proc, GameState: ptr game_state, GameInput: ptr game_input, Assets
 	invoke IsDown, GameInput, Button_Space
 	test eax, eax
 	jz SPACE_NOT_DOWN
-	invoke SokobanRestart, Level
+	invoke SokobanRestart, Level, GameTransform
 SPACE_NOT_DOWN:
 
 	invoke IsDown, GameInput, Button_Up
@@ -815,7 +818,7 @@ UD_ENDPOINT:;NEXTLEVE
 	mov edx, PresentLevel
 	inc edx
 	invoke SetLevelVar, Level, Level_num, edx
-	invoke SokobanRestart, Level
+	invoke SokobanRestart, Level ,GameTransform
 
 
 
